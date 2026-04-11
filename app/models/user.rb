@@ -1,0 +1,110 @@
+class User < ApplicationRecord
+  has_secure_password
+
+  enum :role, { traveler: 0, planner: 1 }
+
+  has_one_attached :avatar
+  has_one_attached :agency_logo
+  has_one_attached :cover_photo
+
+  # Planner associations
+  has_many :trips, dependent: :destroy
+  has_many :received_bookings, through: :trips, source: :bookings
+
+  # Traveler associations
+  has_many :bookings, dependent: :destroy
+  has_many :booked_trips, through: :bookings, source: :trip
+  has_many :reviews, dependent: :destroy
+
+  # Trip Requests
+  has_many :trip_requests, dependent: :destroy
+  has_many :received_trip_requests, class_name: "TripRequest", foreign_key: :planner_id, dependent: :destroy
+
+  # Notifications
+  has_many :notifications, dependent: :destroy
+
+  # Planner Reviews
+  has_many :planner_reviews_given, class_name: "PlannerReview", dependent: :destroy
+  has_many :planner_reviews_received, class_name: "PlannerReview", foreign_key: :planner_id, dependent: :destroy
+
+  # Place Reviews
+  has_many :place_reviews, dependent: :destroy
+
+  # Bike Profile
+  has_one :bike_profile, dependent: :destroy
+
+  # Arrangement Requests (traveler)
+  has_many :arrangement_requests_as_traveler, class_name: "ArrangementRequest", foreign_key: :traveler_id, dependent: :destroy
+
+  # Couple Requests (traveler)
+  has_many :couple_requests, dependent: :destroy
+
+  # Trip Preferences
+  has_one :trip_preference, dependent: :destroy
+
+  # Scopes
+  scope :active, -> { where(deactivated: false) }
+  scope :verified_planners, -> { where(role: :planner, verified: true, deactivated: false) }
+
+  # REMOVED: messaging feature — Nazary v1
+  # has_many :conversation_participants, dependent: :destroy
+  # has_many :conversations, through: :conversation_participants
+  # has_many :sent_messages, class_name: "Message", foreign_key: :sender_id
+
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validates :role, presence: true
+  validates :phone, format: {
+    with: /\A(\+92\d{10}|0\d{10})\z/,
+    message: "must be a valid Pakistan phone number (e.g. +923001234567 or 03001234567)"
+  }, allow_blank: true
+
+  before_save :downcase_email
+
+  def profile_completed?
+    if planner?
+      agency_name.present? && phone.present? && agency_tagline.present? && avatar.attached?
+    else
+      phone.present?
+    end
+  end
+
+  def premium?
+    premium
+  end
+
+  def notifications_enabled?
+    notifications_enabled
+  end
+
+  def average_planner_rating
+    planner_reviews_received.average(:rating)&.round(1) || 0.0
+  end
+
+  def generate_password_reset_token!
+    self.password_reset_token = SecureRandom.urlsafe_base64(32)
+    self.password_reset_sent_at = Time.current
+    save!
+    password_reset_token
+  end
+
+  def password_reset_valid?
+    password_reset_sent_at.present? && password_reset_sent_at > 2.hours.ago
+  end
+
+  def clear_password_reset!
+    update!(password_reset_token: nil, password_reset_sent_at: nil)
+  end
+
+  def generate_refresh_token!
+    token = SecureRandom.urlsafe_base64(32)
+    update!(refresh_token: token)
+    token
+  end
+
+  private
+
+  def downcase_email
+    self.email = email.downcase
+  end
+end
