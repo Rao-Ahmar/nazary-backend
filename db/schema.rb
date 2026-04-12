@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_11_162145) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_12_154038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -145,6 +145,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_162145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["trip_id"], name: "index_itinerary_days_on_trip_id"
+  end
+
+  create_table "itinerary_presets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.jsonb "days", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_itinerary_presets_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_itinerary_presets_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -291,6 +301,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_162145) do
     t.integer "trip_type", default: 0
     t.boolean "is_premium", default: false
     t.datetime "content_updated_at"
+    t.bigint "source_trip_id"
+    t.boolean "recurring_enabled", default: false, null: false
+    t.jsonb "recurring_rule"
+    t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
+    t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"
     t.index ["tags"], name: "index_trips_on_tags", using: :gin
     t.index ["trip_type"], name: "index_trips_on_trip_type"
     t.index ["user_id"], name: "index_trips_on_user_id"
@@ -348,6 +363,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_162145) do
   add_foreign_key "couple_requests", "trips", column: "linked_trip_id"
   add_foreign_key "couple_requests", "users"
   add_foreign_key "itinerary_days", "trips"
+  add_foreign_key "itinerary_presets", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "notifications", "users"
@@ -363,5 +379,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_11_162145) do
   add_foreign_key "trip_requests", "users", column: "planner_id"
   add_foreign_key "trip_updates", "trips"
   add_foreign_key "trip_updates", "users", column: "editor_id"
+  add_foreign_key "trips", "trips", column: "source_trip_id", on_delete: :nullify
   add_foreign_key "trips", "users"
 end

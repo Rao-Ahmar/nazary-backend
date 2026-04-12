@@ -1,7 +1,7 @@
 class TripDetailSerializer < TripListSerializer
   attributes :subtitle, :description, :gallery, :total_seats, :status,
              :highlights, :itinerary, :reviews, :start_date, :end_date, :created_at, :recent_updates,
-             :trip_type, :is_premium
+             :trip_type, :is_premium, :recurring_rule
 
   def gallery
     object.gallery.map do |img|

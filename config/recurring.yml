@@ -18,7 +18,15 @@ production:
     class: TripReminderJob
     schedule: at 8am every day
 
+  create_recurring_trips:
+    class: CreateRecurringTripsJob
+    schedule: at 6am every day
+
 development:
   trip_reminders:
     class: TripReminderJob
     schedule: at 8am every day
+
+  create_recurring_trips:
+    class: CreateRecurringTripsJob
+    schedule: at 6am every day

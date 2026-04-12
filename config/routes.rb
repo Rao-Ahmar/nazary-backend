@@ -90,6 +90,8 @@ Rails.application.routes.draw do
           patch :update_seats, on: :member
           post  :hero_image, on: :member
           post  :gallery, on: :member
+          post  :reschedule, on: :member
+          patch :stop_recurring, on: :member
         end
 
         resources :bookings, only: [ :index ] do
@@ -101,6 +103,8 @@ Rails.application.routes.draw do
           patch :accept, on: :member
           patch :reject, on: :member
         end
+
+        resources :itinerary_presets, only: [ :index, :create, :update, :destroy ]
       end
 
       # Admin namespace

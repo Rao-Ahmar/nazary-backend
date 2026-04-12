@@ -36,10 +36,10 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set host for links generated in mailer templates and Active Storage URLs.
-  config.action_mailer.default_url_options = { host: "192.168.100.42", port: 3000 }
+  config.action_mailer.default_url_options = { host: "192.168.100.26", port: 3000 }
 
   # Active Storage needs this to generate correct URLs for uploaded files
-  Rails.application.routes.default_url_options = { host: "192.168.100.42", port: 3000 }
+  Rails.application.routes.default_url_options = { host: "192.168.100.26", port: 3000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

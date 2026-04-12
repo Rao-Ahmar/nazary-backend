@@ -4,7 +4,11 @@ module Api
       skip_before_action :authenticate!, only: [ :index, :show, :trips ]
 
       def index
-        agencies = User.where(role: :planner, verified: true, deactivated: false)
+        agencies = User.where(role: :planner, deactivated: false)
+        if params[:q].present?
+          q = "%#{params[:q]}%"
+          agencies = agencies.where("agency_name ILIKE :q OR name ILIKE :q OR city ILIKE :q", q: q)
+        end
         result = paginate(agencies)
         render json: result[:data], each_serializer: AgencySerializer, meta: result[:meta]
       end

@@ -2,12 +2,21 @@ module Api
   module V1
     module Planner
       class TripsController < Planner::BaseController
-        before_action :set_trip, only: [ :update, :destroy, :publish, :complete, :hero_image, :gallery, :update_seats ]
+        before_action :set_trip, only: [ :update, :destroy, :publish, :complete, :hero_image, :gallery, :update_seats, :reschedule, :stop_recurring ]
         before_action :require_avatar, only: [ :create ]
 
         def index
           trips = current_user.trips.includes(:reviews, :bookings, hero_image_attachment: :blob)
-                    .order(created_at: :desc)
+
+          # Search
+          trips = trips.search_by_text(params[:q]) if params[:q].present?
+
+          # Filters
+          trips = trips.where(status: params[:status]) if params[:status].present?
+          trips = trips.by_price_range(params[:min_price], params[:max_price])
+          trips = trips.by_date_range(params[:start_date_from], params[:start_date_to])
+
+          trips = trips.order(created_at: :desc)
           result = paginate(trips)
           render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]
         end
@@ -128,6 +137,64 @@ module Api
           render json: @trip, serializer: TripDetailSerializer
         end
 
+        def reschedule
+          new_start = params[:start_date]
+          new_end   = params[:end_date]
+          new_seats = params[:total_seats]
+
+          unless new_start.present? && new_end.present?
+            render json: { error: "start_date and end_date are required" }, status: :unprocessable_entity
+            return
+          end
+
+          new_trip = current_user.trips.new(
+            title: @trip.title,
+            subtitle: @trip.subtitle,
+            description: @trip.description,
+            location: @trip.location,
+            price: @trip.price,
+            currency: @trip.currency,
+            duration: @trip.duration,
+            start_date: new_start,
+            end_date: new_end,
+            total_seats: new_seats.present? ? new_seats.to_i : @trip.total_seats,
+            trip_type: @trip.trip_type,
+            tags: @trip.tags,
+            highlights: @trip.highlights,
+            source_trip_id: @trip.id
+          )
+
+          if new_trip.save
+            # Clone itinerary days
+            @trip.itinerary_days.each do |day|
+              new_trip.itinerary_days.create!(day: day.day, title: day.title, desc: day.desc)
+            end
+
+            # Clone hero image
+            if @trip.hero_image.attached?
+              new_trip.hero_image.attach(@trip.hero_image.blob)
+            end
+
+            # Clone gallery
+            @trip.gallery.each do |img|
+              new_trip.gallery.attach(img.blob)
+            end
+
+            render json: new_trip, serializer: TripDetailSerializer, status: :created
+          else
+            render json: { error: new_trip.errors.full_messages.join(", ") }, status: :unprocessable_entity
+          end
+        end
+
+        def stop_recurring
+          if @trip.recurring_enabled?
+            @trip.update!(recurring_enabled: false)
+            render json: @trip, serializer: TripDetailSerializer
+          else
+            render json: { error: "Trip is not recurring" }, status: :unprocessable_entity
+          end
+        end
+
         private
 
         def set_trip
@@ -137,7 +204,9 @@ module Api
         def trip_params
           params.permit(:title, :subtitle, :description, :location, :price,
                         :currency, :duration, :start_date, :end_date, :total_seats, :trip_type,
-                        tags: [], highlights: [])
+                        :recurring_enabled,
+                        tags: [], highlights: [],
+                        recurring_rule: [ :day_of_week, :hour ])
         end
 
         def create_itinerary_days(trip)

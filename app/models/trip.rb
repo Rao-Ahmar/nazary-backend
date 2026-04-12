@@ -1,5 +1,7 @@
 class Trip < ApplicationRecord
   belongs_to :host, class_name: "User", foreign_key: :user_id
+  belongs_to :source_trip, class_name: "Trip", optional: true
+  has_many :recurring_instances, class_name: "Trip", foreign_key: :source_trip_id, dependent: :nullify
 
   has_one_attached :hero_image
   has_many_attached :gallery
@@ -19,6 +21,7 @@ class Trip < ApplicationRecord
             :start_date, :end_date, :total_seats, presence: true
   validate :end_date_after_start_date
   validate :start_date_not_in_past, on: :create
+  validate :recurring_rule_structure
 
   scope :upcoming, -> { where("start_date >= ?", Date.current) }
   scope :by_date_range, ->(from, to) {
@@ -32,6 +35,13 @@ class Trip < ApplicationRecord
   scope :by_category, ->(tag) { where("? = ANY(tags)", tag) }
   scope :by_trip_type, ->(type) { where(trip_type: type) }
   scope :premium, -> { where(is_premium: true) }
+  scope :recurring, -> { where(recurring_enabled: true) }
+  scope :by_price_range, ->(min, max) {
+    scope = all
+    scope = scope.where("price >= ?", min) if min.present?
+    scope = scope.where("price <= ?", max) if max.present?
+    scope
+  }
 
   before_save :set_premium_flag
 
@@ -48,6 +58,11 @@ class Trip < ApplicationRecord
     reviews.average(:rating)&.round(1) || 0.0
   end
 
+  def duration_in_days
+    return 1 unless start_date && end_date
+    (end_date - start_date).to_i
+  end
+
   private
 
   def end_date_after_start_date
@@ -62,5 +77,21 @@ class Trip < ApplicationRecord
 
   def set_premium_flag
     self.is_premium = true if trip_type_bike_trip? || trip_type_couple_trip?
+  end
+
+  def recurring_rule_structure
+    if recurring_enabled? && recurring_rule.blank?
+      errors.add(:recurring_rule, "is required when recurring is enabled")
+      return
+    end
+    return unless recurring_enabled? && recurring_rule.present?
+
+    unless recurring_rule.is_a?(Hash) &&
+           recurring_rule["day_of_week"].is_a?(Integer) &&
+           (0..6).cover?(recurring_rule["day_of_week"]) &&
+           recurring_rule["hour"].is_a?(Integer) &&
+           (0..23).cover?(recurring_rule["hour"])
+      errors.add(:recurring_rule, "must include day_of_week (0-6) and hour (0-23)")
+    end
   end
 end

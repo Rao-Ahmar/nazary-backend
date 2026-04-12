@@ -42,6 +42,9 @@ class User < ApplicationRecord
   # Trip Preferences
   has_one :trip_preference, dependent: :destroy
 
+  # Itinerary Presets
+  has_many :itinerary_presets, dependent: :destroy
+
   # Scopes
   scope :active, -> { where(deactivated: false) }
   scope :verified_planners, -> { where(role: :planner, verified: true, deactivated: false) }
@@ -78,7 +81,7 @@ class User < ApplicationRecord
   end
 
   def average_planner_rating
-    planner_reviews_received.average(:rating)&.round(1) || 0.0
+    planner_reviews_received.average(:rating)&.to_f&.round(1) || 0.0
   end
 
   def generate_password_reset_token!
