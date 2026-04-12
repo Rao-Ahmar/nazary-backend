@@ -1,7 +1,7 @@
 module Api
   module V1
     class AgenciesController < BaseController
-      skip_before_action :authenticate!, only: [ :index, :show, :trips ]
+      skip_before_action :authenticate!, only: [ :index, :show, :trips, :check_name, :explore ]
 
       def index
         agencies = User.where(role: :planner, deactivated: false)
@@ -26,6 +26,9 @@ module Api
         end
 
         if agency.update(agency_params)
+          if agency.saved_change_to_instagram_url? || agency.saved_change_to_tiktok_url?
+            VerifySocialAccountsJob.perform_later(agency.id)
+          end
           render json: agency, serializer: AgencySerializer, show_phone: true
         else
           render json: { error: agency.errors.full_messages.join(", ") }, status: :unprocessable_entity
@@ -37,6 +40,24 @@ module Api
         trips = agency.trips.where(status: :active).order(start_date: :asc)
         result = paginate(trips)
         render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]
+      end
+
+      def check_name
+        name = params[:name].to_s.strip.downcase
+        if name.blank?
+          return render json: { error: "Name parameter is required" }, status: :bad_request
+        end
+        taken = User.where(agency_name_normalized: name).exists?
+        render json: { available: !taken }
+      end
+
+      def explore
+        agency = User.where(role: :planner, slug: params[:slug]).first
+        if agency
+          render json: agency, serializer: AgencySerializer, show_phone: false
+        else
+          render json: { error: "Agency not found" }, status: :not_found
+        end
       end
 
       private

@@ -36,7 +36,9 @@ planner = User.create!(
   phone_verified: true,
   profile_completed: true,
   premium: true,
-  verified: true
+  verified: true,
+  slug: "malik-adventures",
+  agency_name_normalized: "malik adventures"
 )
 
 # ─── Planner 2: Ayesha Baig ──────────────────────────────
@@ -54,7 +56,9 @@ planner2 = User.create!(
   phone_verified: true,
   profile_completed: true,
   premium: true,
-  verified: true
+  verified: true,
+  slug: "baig-travels",
+  agency_name_normalized: "baig travels"
 )
 
 # ─── Planner 3: Haider Shah ──────────────────────────────
@@ -72,7 +76,9 @@ planner3 = User.create!(
   phone_verified: true,
   profile_completed: true,
   premium: true,
-  verified: true
+  verified: true,
+  slug: "shah-bike-tours",
+  agency_name_normalized: "shah bike tours"
 )
 
 puts "  Created 3 planners"
@@ -591,6 +597,8 @@ User.find_or_create_by!(email: "admin@nazary.pk") do |u|
   u.agency_name = "Nazary Admin"
   u.agency_tagline = "Platform Administration"
   u.phone = "+920000000000"
+  u.slug = "nazary-admin"
+  u.agency_name_normalized = "nazary admin"
 end
 
 puts ""

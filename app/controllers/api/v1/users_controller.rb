@@ -8,6 +8,9 @@ module Api
 
       def update
         if current_user.update(user_params)
+          if current_user.planner? && (current_user.saved_change_to_instagram_url? || current_user.saved_change_to_tiktok_url?)
+            VerifySocialAccountsJob.perform_later(current_user.id)
+          end
           render json: current_user, serializer: UserSerializer
         else
           render json: { error: current_user.errors.full_messages.join(", ") }, status: :unprocessable_entity

@@ -61,7 +61,13 @@ class User < ApplicationRecord
     with: /\A(\+92\d{10}|0\d{10})\z/,
     message: "must be a valid Pakistan phone number (e.g. +923001234567 or 03001234567)"
   }, allow_blank: true
+  validates :agency_name_normalized, uniqueness: {
+    message: "This agency name is already taken. Please use a different name."
+  }, allow_nil: true
+  validates :slug, uniqueness: true, allow_nil: true
 
+  before_validation :normalize_agency_name, if: -> { planner? && agency_name.present? && agency_name_changed? }
+  before_validation :generate_slug_from_agency_name, if: -> { planner? && agency_name.present? && agency_name_changed? }
   before_save :downcase_email
 
   def profile_completed?
@@ -105,9 +111,36 @@ class User < ApplicationRecord
     token
   end
 
+  def nazary_url
+    "nazary.pk/explore/#{slug}" if slug.present?
+  end
+
+  def social_verified?
+    instagram_verified? || tiktok_verified?
+  end
+
   private
 
   def downcase_email
     self.email = email.downcase
+  end
+
+  def normalize_agency_name
+    self.agency_name_normalized = agency_name.strip.downcase
+  end
+
+  def generate_slug_from_agency_name
+    base_slug = agency_name.strip.downcase
+                           .gsub(/[^a-z0-9\s-]/, "")
+                           .gsub(/\s+/, "-")
+                           .gsub(/-+/, "-")
+                           .gsub(/^-|-$/, "")
+    candidate = base_slug
+    counter = 1
+    while User.where(slug: candidate).where.not(id: id).exists?
+      candidate = "#{base_slug}-#{counter}"
+      counter += 1
+    end
+    self.slug = candidate
   end
 end

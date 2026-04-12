@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_12_154038) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_12_202147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -343,9 +343,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_12_154038) do
     t.string "twitter_url"
     t.string "website_url"
     t.boolean "notifications_enabled", default: true, null: false
+    t.string "slug"
+    t.string "agency_name_normalized"
+    t.boolean "instagram_verified", default: false
+    t.boolean "tiktok_verified", default: false
+    t.datetime "social_verified_at"
+    t.index ["agency_name_normalized"], name: "index_users_on_agency_name_normalized", unique: true, where: "(agency_name_normalized IS NOT NULL)"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["password_reset_token"], name: "index_users_on_password_reset_token", unique: true
     t.index ["refresh_token"], name: "index_users_on_refresh_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true, where: "(slug IS NOT NULL)"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

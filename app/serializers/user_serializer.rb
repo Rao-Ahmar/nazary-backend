@@ -7,7 +7,8 @@ class UserSerializer < ActiveModel::Serializer
              :agency_name, :agency_tagline, :years_experience, :agency_logo,
              :planner_rating,
              :youtube_url, :instagram_url, :tiktok_url, :twitter_url, :website_url,
-             :cover_photo
+             :cover_photo,
+             :slug, :nazary_url, :instagram_verified, :tiktok_verified, :social_verified
 
   def id
     object.id.to_s
@@ -61,6 +62,16 @@ class UserSerializer < ActiveModel::Serializer
     Review.where(trip: object.trips).count
   end
 
+  def nazary_url
+    return nil unless object.planner?
+    object.nazary_url
+  end
+
+  def social_verified
+    return nil unless object.planner?
+    object.social_verified?
+  end
+
   def attributes(*args)
     hash = super
     unless object.planner?
@@ -80,6 +91,11 @@ class UserSerializer < ActiveModel::Serializer
       hash.delete(:twitter_url)
       hash.delete(:website_url)
       hash.delete(:cover_photo)
+      hash.delete(:slug)
+      hash.delete(:nazary_url)
+      hash.delete(:instagram_verified)
+      hash.delete(:tiktok_verified)
+      hash.delete(:social_verified)
     end
     hash
   end

@@ -3,7 +3,8 @@ class AgencySerializer < ActiveModel::Serializer
              :verified, :average_rating, :total_trips, :avatar, :agency_logo,
              :years_experience, :created_at,
              :youtube_url, :instagram_url, :tiktok_url, :twitter_url, :website_url,
-             :cover_photo
+             :cover_photo,
+             :slug, :nazary_url, :instagram_verified, :tiktok_verified, :social_verified
 
   def id
     object.id.to_s
@@ -43,5 +44,13 @@ class AgencySerializer < ActiveModel::Serializer
 
   def created_at
     object.created_at.iso8601
+  end
+
+  def nazary_url
+    object.nazary_url
+  end
+
+  def social_verified
+    object.social_verified?
   end
 end

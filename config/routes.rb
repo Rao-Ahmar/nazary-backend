@@ -69,6 +69,8 @@ Rails.application.routes.draw do
       resources :collections, only: [ :index, :show ]
 
       # Agencies (public)
+      get "agencies/check-name", to: "agencies#check_name"
+      get "explore/:slug", to: "agencies#explore"
       resources :agencies, only: [ :index, :show, :update ] do
         get :trips, on: :member
       end

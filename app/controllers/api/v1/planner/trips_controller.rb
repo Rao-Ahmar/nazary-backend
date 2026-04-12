@@ -83,6 +83,10 @@ module Api
         end
 
         def publish
+          unless current_user.social_verified?
+            return render json: { error: "You must verify at least one social account (Instagram or TikTok) before publishing trips." }, status: :forbidden
+          end
+
           if @trip.draft?
             @trip.active!
             NotifyNewTripJob.perform_later(@trip.id)
