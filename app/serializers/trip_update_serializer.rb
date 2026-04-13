@@ -1,5 +1,5 @@
 class TripUpdateSerializer < ActiveModel::Serializer
-  attributes :id, :changes, :editor_name, :created_at
+  attributes :id, :field_changes, :editor_name, :created_at
 
   def id
     object.id.to_s

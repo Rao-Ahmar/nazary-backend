@@ -49,18 +49,16 @@ module Api
             end
 
             if changed_fields.any?
-              trip_update = @trip.trip_updates.create!(
-                editor: current_user,
-                changes: changed_fields
-              )
+              trip_update = @trip.trip_updates.new(editor: current_user, field_changes: changed_fields)
+              trip_update.save!
               @trip.update_column(:content_updated_at, Time.current)
 
-              # Notify confirmed bookers
-              @trip.bookings.confirmed.includes(:user).each do |booking|
+              # Notify all associated travelers (pending and confirmed)
+              @trip.bookings.active.includes(:user).each do |booking|
                 NotificationService.create(
                   user: booking.user,
                   title: "Trip Updated",
-                  body: "#{@trip.title} has been updated by the planner",
+                  body: "#{@trip.title} has been updated. Please call the planner to confirm.",
                   notification_type: :trip_update,
                   data: { trip_id: @trip.id.to_s, trip_update_id: trip_update.id.to_s }
                 )

@@ -4,6 +4,8 @@ class Booking < ApplicationRecord
 
   enum :status, { pending: 0, confirmed: 1, cancelled: 2 }
 
+  scope :active, -> { where(status: [:pending, :confirmed]) }
+
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :user_id, uniqueness: { scope: :trip_id, message: "has already requested to join this trip" }
   validate :traveler_role

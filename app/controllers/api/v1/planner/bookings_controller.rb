@@ -4,7 +4,7 @@ module Api
       class BookingsController < Planner::BaseController
         def index
           bookings = Booking.where(trip: current_user.trips)
-                            .includes(:trip, user: { avatar_attachment: :blob })
+                            .includes(trip: { hero_image_attachment: :blob }, user: { avatar_attachment: :blob })
                             .order(created_at: :desc)
 
           bookings = bookings.where(status: params[:status]) if params[:status].present?
@@ -21,12 +21,26 @@ module Api
             return
           end
           booking.confirmed!
+          NotificationService.create(
+            user: booking.user,
+            title: "Booking Confirmed!",
+            body: "Your request to join #{booking.trip.title} has been confirmed",
+            notification_type: :booking_update,
+            data: { trip_id: booking.trip_id.to_s, booking_id: booking.id.to_s }
+          )
           render json: booking, serializer: BookingSerializer, planner_view: true
         end
 
         def cancel
           booking = find_booking
           booking.cancelled!
+          NotificationService.create(
+            user: booking.user,
+            title: "Booking Declined",
+            body: "Your request to join #{booking.trip.title} was declined",
+            notification_type: :booking_update,
+            data: { trip_id: booking.trip_id.to_s, booking_id: booking.id.to_s }
+          )
           render json: booking, serializer: BookingSerializer, planner_view: true
         end
 

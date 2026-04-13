@@ -11,7 +11,7 @@ module Api
           NotificationService.create(
             user: trip.host,
             title: "New Join Request",
-            body: "#{current_user.name} wants to join #{trip.title}",
+            body: "#{current_user.name} wants to join #{trip.title}. Phone: #{current_user.phone || 'not provided'}",
             notification_type: :booking_update,
             data: { trip_id: trip.id.to_s, booking_id: booking.id.to_s }
           )

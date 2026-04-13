@@ -3,6 +3,9 @@ class BookingSerializer < ActiveModel::Serializer
              :status, :amount, :created_at
 
   attribute :trip_title, if: -> { instance_options[:planner_view] }
+  attribute :trip_hero_image, if: -> { instance_options[:planner_view] }
+  attribute :trip_location, if: -> { instance_options[:planner_view] }
+  attribute :traveler_phone, if: -> { instance_options[:planner_view] }
 
   def id
     object.id.to_s
@@ -32,5 +35,19 @@ class BookingSerializer < ActiveModel::Serializer
 
   def trip_title
     object.trip.title
+  end
+
+  def trip_hero_image
+    object.trip.hero_image.attached? ? Rails.application.routes.url_helpers.url_for(object.trip.hero_image) : nil
+  rescue StandardError
+    nil
+  end
+
+  def trip_location
+    object.trip.location
+  end
+
+  def traveler_phone
+    object.user.phone
   end
 end

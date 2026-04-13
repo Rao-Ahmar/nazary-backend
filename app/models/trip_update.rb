@@ -2,5 +2,5 @@ class TripUpdate < ApplicationRecord
   belongs_to :trip
   belongs_to :editor, class_name: "User"
 
-  validates :changes, presence: true
+  validates :field_changes, presence: true
 end

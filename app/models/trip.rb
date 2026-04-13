@@ -21,6 +21,7 @@ class Trip < ApplicationRecord
             :start_date, :end_date, :total_seats, presence: true
   validate :end_date_after_start_date
   validate :start_date_not_in_past, on: :create
+  validate :not_editable_after_start, on: :update
   validate :recurring_rule_structure
 
   scope :upcoming, -> { where("start_date >= ?", Date.current) }
@@ -73,6 +74,17 @@ class Trip < ApplicationRecord
   def start_date_not_in_past
     return unless start_date
     errors.add(:start_date, "cannot be in the past") if start_date < Date.current
+  end
+
+  def not_editable_after_start
+    return unless start_date_was.present?
+    return unless start_date_was < Date.current
+
+    content_fields = %w[title description location price duration start_date end_date total_seats
+                        subtitle currency trip_type tags highlights recurring_enabled recurring_rule]
+    return unless (changed & content_fields).any?
+
+    errors.add(:base, "Cannot edit a trip after its start date has passed")
   end
 
   def set_premium_flag

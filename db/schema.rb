@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_12_202147) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_14_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -274,7 +274,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_12_202147) do
   create_table "trip_updates", force: :cascade do |t|
     t.bigint "trip_id", null: false
     t.bigint "editor_id", null: false
-    t.jsonb "changes", default: {}
+    t.jsonb "field_changes", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["editor_id"], name: "index_trip_updates_on_editor_id"
