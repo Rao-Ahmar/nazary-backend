@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_100000) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_14_205524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -135,6 +135,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_100000) do
     t.datetime "updated_at", null: false
     t.index ["linked_trip_id"], name: "index_couple_requests_on_linked_trip_id"
     t.index ["user_id"], name: "index_couple_requests_on_user_id"
+  end
+
+  create_table "feedback_submissions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "subject", null: false
+    t.text "message", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_feedback_submissions_on_status"
+    t.index ["user_id"], name: "index_feedback_submissions_on_user_id"
   end
 
   create_table "itinerary_days", force: :cascade do |t|
@@ -304,6 +315,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_100000) do
     t.bigint "source_trip_id"
     t.boolean "recurring_enabled", default: false, null: false
     t.jsonb "recurring_rule"
+    t.integer "seats_sold", default: 0, null: false
     t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
     t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"
     t.index ["tags"], name: "index_trips_on_tags", using: :gin
@@ -369,6 +381,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_100000) do
   add_foreign_key "conversations", "trips"
   add_foreign_key "couple_requests", "trips", column: "linked_trip_id"
   add_foreign_key "couple_requests", "users"
+  add_foreign_key "feedback_submissions", "users"
   add_foreign_key "itinerary_days", "trips"
   add_foreign_key "itinerary_presets", "users"
   add_foreign_key "messages", "conversations"

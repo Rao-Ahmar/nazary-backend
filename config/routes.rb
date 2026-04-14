@@ -82,6 +82,9 @@ Rails.application.routes.draw do
       # Couple Requests
       resources :couple_requests, only: [ :create, :index ]
 
+      # Feedback Submissions
+      resources :feedback_submissions, only: [ :create ]
+
       # Planner namespace
       namespace :planner do
         get "stats", to: "stats#index"

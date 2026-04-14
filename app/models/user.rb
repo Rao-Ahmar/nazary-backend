@@ -45,6 +45,9 @@ class User < ApplicationRecord
   # Itinerary Presets
   has_many :itinerary_presets, dependent: :destroy
 
+  # Feedback Submissions
+  has_many :feedback_submissions, dependent: :destroy
+
   # Scopes
   scope :active, -> { where(deactivated: false) }
   scope :verified_planners, -> { where(role: :planner, verified: true, deactivated: false) }
