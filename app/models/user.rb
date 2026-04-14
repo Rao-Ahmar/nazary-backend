@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  has_secure_password
+  has_secure_password validations: false
+  validates :password, presence: true, on: :create, unless: :google_uid?
 
   enum :role, { traveler: 0, planner: 1 }
 

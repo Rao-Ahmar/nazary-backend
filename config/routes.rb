@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post   "auth/forgot_password", to: "auth#forgot_password"
       post   "auth/reset_password",  to: "auth#reset_password"
       post   "auth/refresh",         to: "auth#refresh"
+      post   "auth/google",          to: "auth#google"
 
       # User profile
       patch "users/me",              to: "users#update"

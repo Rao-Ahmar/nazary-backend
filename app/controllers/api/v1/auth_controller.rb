@@ -1,7 +1,7 @@
 module Api
   module V1
     class AuthController < BaseController
-      skip_before_action :authenticate!, only: [ :signup, :login, :forgot_password, :reset_password, :refresh ]
+      skip_before_action :authenticate!, only: [ :signup, :login, :forgot_password, :reset_password, :refresh, :google ]
 
       def signup
         user = User.new(signup_params)
@@ -85,6 +85,47 @@ module Api
         render json: {
           token: token,
           refresh_token: new_refresh_token
+        }
+      end
+
+      def google
+        id_token = params[:id_token]
+        return render json: { error: "id_token is required" }, status: :bad_request if id_token.blank?
+
+        # Validate token with Google
+        response = Net::HTTP.get_response(URI("https://oauth2.googleapis.com/tokeninfo?id_token=#{id_token}"))
+        unless response.is_a?(Net::HTTPSuccess)
+          return render json: { error: "Invalid Google token" }, status: :unauthorized
+        end
+
+        google_info = JSON.parse(response.body)
+        google_uid = google_info["sub"]
+        email = google_info["email"]&.downcase
+        name = google_info["name"] || email&.split("@")&.first
+
+        return render json: { error: "Invalid Google token" }, status: :unauthorized if google_uid.blank? || email.blank?
+
+        user = User.find_by(google_uid: google_uid) || User.find_by(email: email)
+
+        if user.nil?
+          user = User.new(name: name, email: email, google_uid: google_uid, role: :traveler)
+          unless user.save
+            return render json: { error: user.errors.full_messages.join(", ") }, status: :unprocessable_entity
+          end
+        elsif user.google_uid.blank?
+          user.update!(google_uid: google_uid)
+        end
+
+        if user.deactivated?
+          return render json: { error: "Account has been deactivated" }, status: :forbidden
+        end
+
+        token = JwtService.encode(user.id)
+        refresh_token = user.generate_refresh_token!
+        render json: {
+          user: serialized_user(user),
+          token: token,
+          refresh_token: refresh_token
         }
       end
 
