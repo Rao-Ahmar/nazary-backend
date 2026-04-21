@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_213529) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -316,9 +317,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_213529) do
     t.boolean "recurring_enabled", default: false, null: false
     t.jsonb "recurring_rule"
     t.integer "seats_sold", default: 0, null: false
+    t.index ["location"], name: "index_trips_on_location_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
     t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"
     t.index ["tags"], name: "index_trips_on_tags", using: :gin
+    t.index ["title"], name: "index_trips_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["trip_type"], name: "index_trips_on_trip_type"
     t.index ["user_id"], name: "index_trips_on_user_id"
   end

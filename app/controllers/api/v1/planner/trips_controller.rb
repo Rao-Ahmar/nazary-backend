@@ -33,13 +33,13 @@ module Api
         end
 
         def update
-          old_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date", "total_seats")
+          old_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date")
 
           if @trip.update(trip_params)
             update_itinerary_days(@trip) if params[:itinerary_days].present?
 
-            # Track changes
-            new_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date", "total_seats")
+            # Track changes (total_seats excluded — seat changes don't notify travelers)
+            new_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date")
             changed_fields = {}
             old_attributes.each do |key, old_val|
               new_val = new_attributes[key]
@@ -81,9 +81,11 @@ module Api
         end
 
         def publish
-          unless current_user.social_verified?
-            return render json: { error: "You must verify at least one social account (Instagram or TikTok) before publishing trips." }, status: :forbidden
-          end
+          # TODO: Re-enable once social verification flow is fully in place.
+          # For now, travelers verify agencies manually by checking their Nazary link in Instagram/TikTok bio.
+          # unless current_user.social_verified?
+          #   return render json: { error: "You must verify at least one social account (Instagram or TikTok) before publishing trips." }, status: :forbidden
+          # end
 
           if @trip.draft?
             @trip.active!
@@ -122,20 +124,22 @@ module Api
         end
 
         def update_seats
-          new_total = params[:total_seats].to_i
+          desired_left = params[:seats_left].to_i
           confirmed_count = @trip.bookings.confirmed.count
+          max_left = @trip.total_seats - confirmed_count
 
-          if new_total < confirmed_count
-            render json: { error: "Total seats cannot be less than confirmed bookings (#{confirmed_count})" }, status: :unprocessable_entity
+          if desired_left < 0
+            render json: { error: "Seats left cannot be negative" }, status: :unprocessable_entity
             return
           end
 
-          if new_total < 1
-            render json: { error: "Total seats must be at least 1" }, status: :unprocessable_entity
+          if desired_left > max_left
+            render json: { error: "Seats left cannot exceed #{max_left} (total #{@trip.total_seats} minus #{confirmed_count} confirmed)" }, status: :unprocessable_entity
             return
           end
 
-          @trip.update!(total_seats: new_total)
+          new_seats_sold = max_left - desired_left
+          @trip.update!(seats_sold: new_seats_sold)
           render json: @trip, serializer: TripDetailSerializer
         end
 

@@ -12,13 +12,17 @@ module Api
         trips = trips.by_host(params[:host_id]) if params[:host_id].present?
         trips = trips.by_trip_type(params[:trip_type]) if params[:trip_type].present?
 
-        trips = case params[:sort]
-        when "price_asc" then trips.order(price: :asc)
-        when "price_desc" then trips.order(price: :desc)
-        when "newest" then trips.order(created_at: :desc)
-        when "start_date_asc" then trips.order(start_date: :asc)
-        else trips.order(start_date: :asc)
-        end
+        trips = if params[:q].present? && params[:sort].blank?
+                  trips  # pg_search orders by relevance rank
+                else
+                  case params[:sort]
+                  when "price_asc" then trips.order(price: :asc)
+                  when "price_desc" then trips.order(price: :desc)
+                  when "newest" then trips.order(created_at: :desc)
+                  when "start_date_asc" then trips.order(start_date: :asc)
+                  else trips.order(start_date: :asc)
+                  end
+                end
 
         result = paginate(trips)
         render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]

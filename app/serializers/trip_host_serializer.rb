@@ -1,5 +1,6 @@
 class TripHostSerializer < ActiveModel::Serializer
-  attributes :id, :name, :avatar, :guild, :rating, :phone, :trips_hosted
+  attributes :id, :name, :avatar, :guild, :rating, :phone, :trips_hosted,
+             :instagram_url, :tiktok_url, :nazary_url, :instagram_verified, :tiktok_verified
 
   def id
     object.id.to_s
@@ -21,5 +22,9 @@ class TripHostSerializer < ActiveModel::Serializer
 
   def trips_hosted
     object.trips.count
+  end
+
+  def nazary_url
+    object.nazary_url
   end
 end

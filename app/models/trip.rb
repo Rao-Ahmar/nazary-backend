@@ -49,10 +49,13 @@ class Trip < ApplicationRecord
   include PgSearch::Model
   pg_search_scope :search_by_text,
     against: [ :title, :location, :description ],
-    using: { tsearch: { prefix: true } }
+    using: {
+      tsearch: { prefix: true, dictionary: "simple" },
+      trigram: { only: [ :title, :location ], threshold: 0.1 }
+    }
 
   def seats_left
-    total_seats - bookings.confirmed.count
+    total_seats - bookings.confirmed.count - (seats_sold || 0)
   end
 
   def average_rating

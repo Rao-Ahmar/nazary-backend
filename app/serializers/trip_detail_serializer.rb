@@ -1,7 +1,7 @@
 class TripDetailSerializer < TripListSerializer
   attributes :subtitle, :description, :gallery, :total_seats, :status,
              :highlights, :itinerary, :reviews, :start_date, :end_date, :created_at, :recent_updates,
-             :trip_type, :is_premium, :recurring_rule
+             :trip_type, :is_premium, :recurring_rule, :my_booking_status
 
   def gallery
     object.gallery.map do |img|
@@ -29,5 +29,10 @@ class TripDetailSerializer < TripListSerializer
     object.trip_updates.order(created_at: :desc).limit(5).map do |u|
       TripUpdateSerializer.new(u).as_json
     end
+  end
+
+  def my_booking_status
+    return nil unless scope.present? && scope.traveler?
+    object.bookings.find_by(user: scope)&.status
   end
 end
