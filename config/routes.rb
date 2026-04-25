@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       # Traveler bookings
       resources :bookings, only: [ :index, :show ] do
         patch :cancel, on: :member
+        get :payment_info, on: :member
+        post :payment_proof, on: :member, to: "bookings#submit_payment_proof"
       end
 
       # Trip Requests (traveler)
@@ -86,6 +88,9 @@ Rails.application.routes.draw do
       # Feedback Submissions
       resources :feedback_submissions, only: [ :create ]
 
+      # Points
+      get "points/me", to: "points#me"
+
       # Planner namespace
       namespace :planner do
         get "stats", to: "stats#index"
@@ -127,6 +132,28 @@ Rails.application.routes.draw do
         resources :users, only: [ :index ] do
           patch :deactivate, on: :member
         end
+
+        # Booking management
+        resources :bookings, only: [ :index, :show ] do
+          patch :approve, on: :member
+          patch :reject, on: :member
+          patch :verify_payment, on: :member
+          patch :reject_payment, on: :member
+          patch :confirm, on: :member
+          patch :cancel, on: :member
+        end
+
+        # Rewards
+        resources :rewards, only: [ :index ] do
+          patch :mark_gift_sent, on: :member
+          patch :mark_free_trip_arranged, on: :member
+        end
+
+        # Payment account settings
+        resources :payment_accounts, only: [ :index, :create, :update, :destroy ]
+
+        # Dashboard stats
+        get :stats, to: "stats#index"
       end
 
       # Bike namespace (premium)

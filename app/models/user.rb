@@ -31,6 +31,13 @@ class User < ApplicationRecord
   # Place Reviews
   has_many :place_reviews, dependent: :destroy
 
+  # Referrals
+  belongs_to :referred_by, class_name: "User", optional: true
+  has_many :referrals, class_name: "User", foreign_key: :referred_by_user_id
+
+  # Free trip pair
+  belongs_to :free_trip_pair, class_name: "User", optional: true
+
   # Bike Profile
   has_one :bike_profile, dependent: :destroy
 
@@ -48,6 +55,12 @@ class User < ApplicationRecord
 
   # Feedback Submissions
   has_many :feedback_submissions, dependent: :destroy
+
+  # Points
+  has_many :points_logs, dependent: :destroy
+
+  # Payment Proofs (through bookings)
+  has_many :payment_proofs, through: :bookings
 
   # Scopes
   scope :active, -> { where(deactivated: false) }
@@ -72,6 +85,7 @@ class User < ApplicationRecord
 
   before_validation :normalize_agency_name, if: -> { planner? && agency_name.present? && agency_name_changed? }
   before_validation :generate_slug_from_agency_name, if: -> { planner? && agency_name.present? && agency_name_changed? }
+  before_create :generate_referral_code
   before_save :downcase_email
 
   def profile_completed?
@@ -131,6 +145,13 @@ class User < ApplicationRecord
 
   def normalize_agency_name
     self.agency_name_normalized = agency_name.strip.downcase
+  end
+
+  def generate_referral_code
+    loop do
+      self.referral_code = SecureRandom.alphanumeric(8).upcase
+      break unless User.exists?(referral_code: referral_code)
+    end
   end
 
   def generate_slug_from_agency_name

@@ -99,6 +99,7 @@ module Api
         def complete
           if @trip.active?
             @trip.completed!
+            award_points_for_completed_trip
             render json: @trip, serializer: TripDetailSerializer
           else
             render json: { error: "Only active trips can be completed" }, status: :unprocessable_entity
@@ -205,6 +206,19 @@ module Api
 
         def set_trip
           @trip = current_user.trips.find(params[:id])
+        end
+
+        def award_points_for_completed_trip
+          @trip.bookings.where(status: :confirmed).includes(user: :referred_by).each do |booking|
+            traveler = booking.user
+            was_first_trip = traveler.completed_trips_count == 0
+
+            PointsService.award_trip_completion(traveler, @trip)
+
+            if was_first_trip && traveler.referred_by.present?
+              PointsService.award_referral_bonus(traveler.referred_by, traveler, @trip)
+            end
+          end
         end
 
         def trip_params

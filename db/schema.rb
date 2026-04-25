@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_25_144146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -78,6 +78,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "admin_note"
     t.index ["trip_id", "user_id"], name: "index_bookings_on_trip_id_and_user_id", unique: true
     t.index ["trip_id"], name: "index_bookings_on_trip_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
@@ -205,6 +206,32 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
     t.index ["phone_number", "code"], name: "index_otp_verifications_on_phone_number_and_code"
   end
 
+  create_table "payment_accounts", force: :cascade do |t|
+    t.integer "method_type", null: false
+    t.string "account_title", null: false
+    t.string "account_number", null: false
+    t.string "bank_name"
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_active"], name: "index_payment_accounts_on_is_active"
+    t.index ["method_type"], name: "index_payment_accounts_on_method_type"
+  end
+
+  create_table "payment_proofs", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.string "reference_number", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "method_used", null: false
+    t.integer "status", default: 0, null: false
+    t.text "admin_note"
+    t.datetime "verified_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_payment_proofs_on_booking_id"
+    t.index ["status"], name: "index_payment_proofs_on_status"
+  end
+
   create_table "place_reviews", force: :cascade do |t|
     t.bigint "place_id", null: false
     t.bigint "user_id", null: false
@@ -238,6 +265,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
     t.index ["planner_id"], name: "index_planner_reviews_on_planner_id"
     t.index ["user_id", "planner_id"], name: "index_planner_reviews_on_user_id_and_planner_id", unique: true
     t.index ["user_id"], name: "index_planner_reviews_on_user_id"
+  end
+
+  create_table "points_logs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "points", null: false
+    t.string "reason", null: false
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_points_logs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_points_logs_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -364,10 +402,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
     t.boolean "tiktok_verified", default: false
     t.datetime "social_verified_at"
     t.string "google_uid"
+    t.string "referral_code"
+    t.bigint "referred_by_user_id"
+    t.integer "points", default: 0, null: false
+    t.integer "completed_trips_count", default: 0, null: false
+    t.boolean "surprise_gift_eligible", default: false
+    t.boolean "surprise_gift_sent", default: false
+    t.boolean "free_trip_eligible", default: false
+    t.boolean "free_trip_arranged", default: false
+    t.bigint "free_trip_pair_user_id"
     t.index ["agency_name_normalized"], name: "index_users_on_agency_name_normalized", unique: true, where: "(agency_name_normalized IS NOT NULL)"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true, where: "(google_uid IS NOT NULL)"
     t.index ["password_reset_token"], name: "index_users_on_password_reset_token", unique: true
+    t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
+    t.index ["referred_by_user_id"], name: "index_users_on_referred_by_user_id"
     t.index ["refresh_token"], name: "index_users_on_refresh_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true, where: "(slug IS NOT NULL)"
   end
@@ -392,10 +441,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "notifications", "users"
+  add_foreign_key "payment_proofs", "bookings"
   add_foreign_key "place_reviews", "places"
   add_foreign_key "place_reviews", "users"
   add_foreign_key "planner_reviews", "users"
   add_foreign_key "planner_reviews", "users", column: "planner_id"
+  add_foreign_key "points_logs", "users"
   add_foreign_key "reviews", "trips"
   add_foreign_key "reviews", "users"
   add_foreign_key "trip_preferences", "users"
@@ -406,4 +457,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_220110) do
   add_foreign_key "trip_updates", "users", column: "editor_id"
   add_foreign_key "trips", "trips", column: "source_trip_id", on_delete: :nullify
   add_foreign_key "trips", "users"
+  add_foreign_key "users", "users", column: "free_trip_pair_user_id"
+  add_foreign_key "users", "users", column: "referred_by_user_id"
 end

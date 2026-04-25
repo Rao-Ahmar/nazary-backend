@@ -1,6 +1,8 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :role, :avatar, :phone, :created_at,
-             :profile_completed, :notifications_enabled
+  attributes :id, :name, :email, :role, :admin, :avatar, :phone, :created_at,
+             :profile_completed, :notifications_enabled,
+             :referral_code, :referred_by,
+             :points, :completed_trips_count
 
   # Planner-only fields
   attributes :bio, :guild, :rating, :trips_hosted, :total_reviews,
@@ -32,6 +34,11 @@ class UserSerializer < ActiveModel::Serializer
     object.agency_logo.attached? ? Rails.application.routes.url_helpers.url_for(object.agency_logo) : nil
   rescue StandardError
     nil
+  end
+
+  def referred_by
+    return nil unless object.referred_by
+    { id: object.referred_by.id.to_s, name: object.referred_by.name }
   end
 
   def created_at
