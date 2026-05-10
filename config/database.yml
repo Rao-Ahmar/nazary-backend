@@ -81,9 +81,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: nazary_backend_production
-    username: nazary_backend
-    password: <%= ENV["NAZARY_BACKEND_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
     database: nazary_backend_production_cache
