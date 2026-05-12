@@ -30,3 +30,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Firebase service account (private key)
+/config/firebase-service-account.json
