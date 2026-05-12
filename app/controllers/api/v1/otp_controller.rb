@@ -8,8 +8,8 @@ module Api
           return render json: { error: "Valid Pakistan phone number is required" }, status: :unprocessable_entity
         end
 
-        OtpService.generate(phone_number)
-        render json: { message: "OTP sent successfully" }
+        OtpService.generate(phone_number, email: current_user.email)
+        render json: { message: "OTP sent to your email" }
       end
 
       def verify

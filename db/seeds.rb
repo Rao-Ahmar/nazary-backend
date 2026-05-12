@@ -2,120 +2,120 @@ puts "Seeding Nazary..."
 
 # ─── Cleanup ──────────────────────────────────────────────
 # Reset everything for a clean seed
-[ArrangementRequest, CollectionTrip, Collection, BikeProfile, PlaceReview, Place,
+ActiveStorage::Attachment.delete_all rescue nil
+ActiveStorage::Blob.delete_all rescue nil
+[PaymentProof, PaymentAccount, ArrangementRequest, CollectionTrip, Collection, BikeProfile, PlaceReview, Place,
  Notification, PlannerReview, TripRequest, Review, Booking, ItineraryDay, TripUpdate, Trip,
  CoupleRequest, OtpVerification, Category, User].each do |model|
-  model.destroy_all
+  model.delete_all
 rescue StandardError
   nil
 end
-ActiveStorage::Attachment.destroy_all rescue nil
 
 puts "  Cleaned existing data"
 
 # ─── Categories ───────────────────────────────────────────
-categories = ["All", "Adventure", "Cultural", "Wellness", "Family", "Bike"]
-icons = ["compass", "mountain-snow", "landmark", "heart-pulse", "people", "bike"]
-categories.each_with_index do |label, i|
-  Category.create!(label: label, icon: icons[i])
-end
+categories = [
+  { label: "Luxury",         icon: "diamond-outline" },
+  { label: "Party",          icon: "musical-notes-outline" },
+  { label: "Adventures",     icon: "compass-outline" },
+  { label: "Budget Friendly", icon: "wallet-outline" },
+  { label: "Couple Trips",   icon: "heart-outline" },
+  { label: "Family Trips",   icon: "people-outline" },
+  { label: "Friends Trips",  icon: "beer-outline" },
+]
+categories.each { |c| Category.create!(label: c[:label], icon: c[:icon]) }
 puts "  Created #{Category.count} categories"
 
 # ─── Planner 1: Usman Malik ──────────────────────────────
-planner = User.create!(
-  name: "Usman Malik",
-  email: "usman@nazary.com",
-  password: "password123",
-  role: :planner,
-  bio: "Born and raised in Gilgit. Leading expeditions across Karakoram and Hindukush for 10 years. Every trail has a story.",
-  guild: "Karakoram Explorers",
-  agency_name: "Malik Adventures",
-  agency_tagline: "Your gateway to the mountains",
-  years_experience: 10,
-  phone: "+923001234567",
-  phone_verified: true,
-  profile_completed: true,
-  premium: true,
-  verified: true,
-  slug: "malik-adventures",
-  agency_name_normalized: "malik adventures"
-)
+planner = User.find_or_create_by!(email: "usman@nazary.com") do |u|
+  u.name = "Usman Malik"
+  u.password = "password123"
+  u.role = :planner
+  u.bio = "Born and raised in Gilgit. Leading expeditions across Karakoram and Hindukush for 10 years. Every trail has a story."
+  u.guild = "Karakoram Explorers"
+  u.agency_name = "Malik Adventures"
+  u.agency_tagline = "Your gateway to the mountains"
+  u.years_experience = 10
+  u.phone = "+923001234567"
+  u.phone_verified = true
+  u.profile_completed = true
+  u.premium = true
+  u.verified = true
+  u.slug = "malik-adventures"
+  u.agency_name_normalized = "malik adventures"
+end
 
 # ─── Planner 2: Ayesha Baig ──────────────────────────────
-planner2 = User.create!(
-  name: "Ayesha Baig",
-  email: "ayesha@nazary.com",
-  password: "password123",
-  role: :planner,
-  bio: "Passionate about responsible tourism in Pakistan. Specializing in family-friendly and cultural tours of the northern areas.",
-  guild: "Northern Sisters",
-  agency_name: "Baig Travels",
-  agency_tagline: "Discover the undiscovered",
-  years_experience: 7,
-  phone: "+923009876543",
-  phone_verified: true,
-  profile_completed: true,
-  premium: true,
-  verified: true,
-  slug: "baig-travels",
-  agency_name_normalized: "baig travels"
-)
+planner2 = User.find_or_create_by!(email: "ayesha@nazary.com") do |u|
+  u.name = "Ayesha Baig"
+  u.password = "password123"
+  u.role = :planner
+  u.bio = "Passionate about responsible tourism in Pakistan. Specializing in family-friendly and cultural tours of the northern areas."
+  u.guild = "Northern Sisters"
+  u.agency_name = "Baig Travels"
+  u.agency_tagline = "Discover the undiscovered"
+  u.years_experience = 7
+  u.phone = "+923009876543"
+  u.phone_verified = true
+  u.profile_completed = true
+  u.premium = true
+  u.verified = true
+  u.slug = "baig-travels"
+  u.agency_name_normalized = "baig travels"
+end
 
 # ─── Planner 3: Haider Shah ──────────────────────────────
-planner3 = User.create!(
-  name: "Haider Shah",
-  email: "haider@nazary.com",
-  password: "password123",
-  role: :planner,
-  bio: "Motorcycle touring specialist. Ridden every pass in northern Pakistan. If it has two wheels and a mountain road, I'm in.",
-  guild: "KKH Riders",
-  agency_name: "Shah Bike Tours",
-  agency_tagline: "Ride the roof of the world",
-  years_experience: 5,
-  phone: "+923331112233",
-  phone_verified: true,
-  profile_completed: true,
-  premium: true,
-  verified: true,
-  slug: "shah-bike-tours",
-  agency_name_normalized: "shah bike tours"
-)
+planner3 = User.find_or_create_by!(email: "haider@nazary.com") do |u|
+  u.name = "Haider Shah"
+  u.password = "password123"
+  u.role = :planner
+  u.bio = "Motorcycle touring specialist. Ridden every pass in northern Pakistan. If it has two wheels and a mountain road, I'm in."
+  u.guild = "KKH Riders"
+  u.agency_name = "Shah Bike Tours"
+  u.agency_tagline = "Ride the roof of the world"
+  u.years_experience = 5
+  u.phone = "+923331112233"
+  u.phone_verified = true
+  u.profile_completed = true
+  u.premium = true
+  u.verified = true
+  u.slug = "shah-bike-tours"
+  u.agency_name_normalized = "shah bike tours"
+end
 
 puts "  Created 3 planners"
 
 # ─── Traveler 1: Zainab Hussain ──────────────────────────
-traveler = User.create!(
-  name: "Zainab Hussain",
-  email: "zainab@nazary.com",
-  password: "password123",
-  role: :traveler,
-  phone: "+923005551234",
-  phone_verified: true,
-  profile_completed: true,
-  premium: true
-)
+traveler = User.find_or_create_by!(email: "zainab@nazary.com") do |u|
+  u.name = "Zainab Hussain"
+  u.password = "password123"
+  u.role = :traveler
+  u.phone = "+923005551234"
+  u.phone_verified = true
+  u.profile_completed = true
+  u.premium = true
+end
 
 # ─── Traveler 2: Bilal Ahmed ─────────────────────────────
-traveler2 = User.create!(
-  name: "Bilal Ahmed",
-  email: "bilal@nazary.com",
-  password: "password123",
-  role: :traveler,
-  phone: "+923007778899",
-  phone_verified: true,
-  profile_completed: true
-)
+traveler2 = User.find_or_create_by!(email: "bilal@nazary.com") do |u|
+  u.name = "Bilal Ahmed"
+  u.password = "password123"
+  u.role = :traveler
+  u.phone = "+923007778899"
+  u.phone_verified = true
+  u.profile_completed = true
+end
 
 # ─── Traveler 3: Mehreen Khan ────────────────────────────
-traveler3 = User.create!(
-  name: "Mehreen Khan",
-  email: "mehreen@nazary.com",
-  password: "password123",
-  role: :traveler,
-  phone: "+923214567890",
-  phone_verified: true,
-  profile_completed: true
-)
+traveler3 = User.find_or_create_by!(email: "mehreen@nazary.com") do |u|
+  u.name = "Mehreen Khan"
+  u.password = "password123"
+  u.role = :traveler
+  u.phone = "+923214567890"
+  u.phone_verified = true
+  u.profile_completed = true
+end
 
 puts "  Created 3 travelers"
 
@@ -162,7 +162,7 @@ trip1 = Trip.create!(
   total_seats: 15,
   status: :active,
   trip_type: :casual,
-  tags: ["Adventure", "Cultural", "Mountain"],
+  tags: ["Adventures", "Family Trips"],
   highlights: [
     "Visit the 700-year-old Baltit Fort",
     "Sunrise at Eagle's Nest viewpoint",
@@ -198,7 +198,7 @@ trip2 = Trip.create!(
   total_seats: 10,
   status: :active,
   trip_type: :casual,
-  tags: ["Trekking", "Camping", "Mountain"],
+  tags: ["Adventures", "Budget Friendly"],
   highlights: [
     "Trek through dense pine forests",
     "Camp with Nanga Parbat views",
@@ -232,7 +232,7 @@ trip3 = Trip.create!(
   total_seats: 12,
   status: :active,
   trip_type: :casual,
-  tags: ["Adventure", "Wildlife", "Lakes"],
+  tags: ["Adventures", "Luxury"],
   highlights: [
     "Drive across Deosai Plains (4,114m)",
     "Spot Himalayan brown bears",
@@ -270,7 +270,7 @@ trip4 = Trip.create!(
   total_seats: 8,
   status: :active,
   trip_type: :bike_trip,
-  tags: ["Bike", "Adventure", "Mountain"],
+  tags: ["Adventures", "Friends Trips"],
   highlights: [
     "Ride the highest paved road in the world",
     "Cross Khunjerab Pass at 4,693m",
@@ -310,7 +310,7 @@ trip5 = Trip.create!(
   total_seats: 20,
   status: :active,
   trip_type: :family,
-  tags: ["Family", "Cultural", "Nature"],
+  tags: ["Family Trips", "Budget Friendly"],
   highlights: [
     "Family-friendly hotels throughout",
     "Malam Jabba chairlift ride",
@@ -344,7 +344,7 @@ trip6 = Trip.create!(
   total_seats: 12,
   status: :active,
   trip_type: :casual,
-  tags: ["Adventure", "Nature", "Kashmir"],
+  tags: ["Adventures", "Friends Trips"],
   highlights: [
     "Drive along the Neelum River",
     "Visit Sharda Peeth ruins",
@@ -378,7 +378,7 @@ trip7 = Trip.create!(
   total_seats: 10,
   status: :active,
   trip_type: :casual,
-  tags: ["Winter", "Skiing", "Lakes"],
+  tags: ["Adventures", "Party"],
   highlights: [
     "Naltar's three colorful lakes",
     "Skiing at Naltar Ski Resort",
@@ -411,7 +411,7 @@ trip8 = Trip.create!(
   total_seats: 6,
   status: :active,
   trip_type: :couple_trip,
-  tags: ["Couple", "Premium", "Romantic"],
+  tags: ["Couple Trips", "Luxury"],
   highlights: [
     "Private airport transfers",
     "Boutique hotel in Karimabad",
@@ -600,6 +600,30 @@ User.find_or_create_by!(email: "admin@nazary.pk") do |u|
   u.slug = "nazary-admin"
   u.agency_name_normalized = "nazary admin"
 end
+
+# ═══════════════════════════════════════════════════════════
+#  PAYMENT ACCOUNTS (Admin-configured)
+# ═══════════════════════════════════════════════════════════
+PaymentAccount.create!(
+  method_type: :jazzcash,
+  account_title: "Nazary Payments",
+  account_number: "03001234567",
+  is_active: true
+)
+PaymentAccount.create!(
+  method_type: :easypaisa,
+  account_title: "Nazary Payments",
+  account_number: "03009876543",
+  is_active: true
+)
+PaymentAccount.create!(
+  method_type: :bank_transfer,
+  account_title: "Nazary Travel Pvt Ltd",
+  account_number: "PK36MEZN0099120101234567",
+  bank_name: "Meezan Bank",
+  is_active: true
+)
+puts "  Created #{PaymentAccount.count} payment accounts"
 
 puts ""
 puts "=" * 60

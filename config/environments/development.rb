@@ -29,17 +29,32 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Enable email delivery in development for OTP testing
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+
+  # Gmail SMTP
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    user_name: "nazarysupport@gmail.com",
+    password: ENV.fetch("GMAIL_APP_PASSWORD", "pteu fuqi aklj rpva"),
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Set host for links generated in mailer templates and Active Storage URLs.
-  config.action_mailer.default_url_options = { host: "192.168.100.26", port: 3000 }
+  # Auto-detect local IP so Active Storage URLs work on mobile devices
+  # without hardcoding an IP that changes every time WiFi reconnects.
+  local_ip = Socket.ip_address_list
+    .detect { |addr| addr.ipv4_private? }
+    &.ip_address || "localhost"
 
-  # Active Storage needs this to generate correct URLs for uploaded files
-  Rails.application.routes.default_url_options = { host: "192.168.100.26", port: 3000 }
+  config.action_mailer.default_url_options = { host: local_ip, port: 3000 }
+  Rails.application.routes.default_url_options = { host: local_ip, port: 3000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
