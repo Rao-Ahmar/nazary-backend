@@ -5,7 +5,7 @@ module Api
 
       def create
         trip = Trip.find(params[:trip_id])
-        advance_fee = (trip.price * 0.02).ceil
+        advance_fee = (trip.price * 0.01).ceil
         booking = current_user.bookings.new(trip: trip, amount: advance_fee)
 
         if booking.save
