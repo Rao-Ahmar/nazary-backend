@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_25_144146) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_25_161227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -122,6 +122,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_25_144146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["trip_id"], name: "index_conversations_on_trip_id"
+  end
+
+  create_table "corporate_trip_requests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "company_name", null: false
+    t.integer "estimated_people", null: false
+    t.string "contact_email"
+    t.string "contact_phone"
+    t.text "special_notes"
+    t.integer "status", default: 0, null: false
+    t.text "admin_note"
+    t.bigint "preferred_planner_id"
+    t.bigint "linked_trip_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_corporate_trip_requests_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_corporate_trip_requests_on_user_id"
   end
 
   create_table "couple_requests", force: :cascade do |t|
@@ -411,6 +428,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_25_144146) do
     t.boolean "free_trip_eligible", default: false
     t.boolean "free_trip_arranged", default: false
     t.bigint "free_trip_pair_user_id"
+    t.integer "corporate_trips_count", default: 0, null: false
+    t.string "corporate_level", default: "none"
     t.index ["agency_name_normalized"], name: "index_users_on_agency_name_normalized", unique: true, where: "(agency_name_normalized IS NOT NULL)"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true, where: "(google_uid IS NOT NULL)"
@@ -433,6 +452,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_25_144146) do
   add_foreign_key "conversation_participants", "conversations"
   add_foreign_key "conversation_participants", "users"
   add_foreign_key "conversations", "trips"
+  add_foreign_key "corporate_trip_requests", "trips", column: "linked_trip_id"
+  add_foreign_key "corporate_trip_requests", "users"
+  add_foreign_key "corporate_trip_requests", "users", column: "preferred_planner_id"
   add_foreign_key "couple_requests", "trips", column: "linked_trip_id"
   add_foreign_key "couple_requests", "users"
   add_foreign_key "feedback_submissions", "users"

@@ -1,5 +1,5 @@
 class TripHostSerializer < ActiveModel::Serializer
-  attributes :id, :name, :avatar, :guild, :rating, :phone, :trips_hosted,
+  attributes :id, :name, :avatar, :guild, :rating, :trips_hosted,
              :instagram_url, :tiktok_url, :nazary_url, :instagram_verified, :tiktok_verified
 
   def id
@@ -14,10 +14,6 @@ class TripHostSerializer < ActiveModel::Serializer
 
   def rating
     object.trips.joins(:reviews).average("reviews.rating")&.round(1) || 0.0
-  end
-
-  def phone
-    object.phone
   end
 
   def trips_hosted

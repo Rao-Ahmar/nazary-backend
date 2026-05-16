@@ -15,8 +15,7 @@ module Api
 
       def show
         agency = User.where(role: :planner).find(params[:id])
-        show_phone = should_show_phone?(agency)
-        render json: agency, serializer: AgencySerializer, show_phone: show_phone
+        render json: agency, serializer: AgencySerializer
       end
 
       def update
@@ -29,7 +28,7 @@ module Api
           if agency.saved_change_to_instagram_url? || agency.saved_change_to_tiktok_url?
             VerifySocialAccountsJob.perform_later(agency.id)
           end
-          render json: agency, serializer: AgencySerializer, show_phone: true
+          render json: agency, serializer: AgencySerializer
         else
           render json: { error: agency.errors.full_messages.join(", ") }, status: :unprocessable_entity
         end
@@ -54,7 +53,7 @@ module Api
       def explore
         agency = User.where(role: :planner, slug: params[:slug]).first
         if agency
-          render json: agency, serializer: AgencySerializer, show_phone: false
+          render json: agency, serializer: AgencySerializer
         else
           render json: { error: "Agency not found" }, status: :not_found
         end
@@ -67,11 +66,6 @@ module Api
                       :youtube_url, :instagram_url, :tiktok_url, :twitter_url, :website_url)
       end
 
-      def should_show_phone?(agency)
-        return false unless current_user
-        # Show phone if traveler has an accepted trip request with this agency
-        TripRequest.exists?(user_id: current_user.id, planner_id: agency.id, status: :accepted)
-      end
     end
   end
 end

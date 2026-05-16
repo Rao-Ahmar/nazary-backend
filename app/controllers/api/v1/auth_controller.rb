@@ -4,7 +4,11 @@ module Api
       skip_before_action :authenticate!, only: [ :signup, :login, :forgot_password, :reset_password, :refresh, :google ]
 
       def signup
-        user = User.new(signup_params)
+        user = User.new(signup_params.except(:referral_code))
+        if params[:referral_code].present?
+          referrer = User.find_by(referral_code: params[:referral_code])
+          user.referred_by = referrer if referrer
+        end
         if user.save
           token = JwtService.encode(user.id)
           refresh_token = user.generate_refresh_token!
@@ -132,7 +136,7 @@ module Api
       private
 
       def signup_params
-        params.permit(:name, :email, :password, :role)
+        params.permit(:name, :email, :password, :role, :referral_code)
       end
 
       def serialized_user(user)

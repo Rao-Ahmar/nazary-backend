@@ -85,6 +85,9 @@ Rails.application.routes.draw do
       # Couple Requests
       resources :couple_requests, only: [ :create, :index ]
 
+      # Corporate Trip Requests
+      resources :corporate_trip_requests, only: [ :create, :index ]
+
       # Feedback Submissions
       resources :feedback_submissions, only: [ :create ]
 
@@ -129,6 +132,7 @@ Rails.application.routes.draw do
         end
         resources :arrangement_requests, only: [ :index, :update ]
         resources :couple_requests, only: [ :index, :update ]
+        resources :corporate_trip_requests, only: [ :index, :update ]
         resources :users, only: [ :index ] do
           patch :deactivate, on: :member
         end

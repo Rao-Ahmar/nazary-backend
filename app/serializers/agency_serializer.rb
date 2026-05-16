@@ -1,5 +1,5 @@
 class AgencySerializer < ActiveModel::Serializer
-  attributes :id, :agency_name, :name, :bio, :agency_tagline, :city, :phone,
+  attributes :id, :agency_name, :name, :bio, :agency_tagline, :city,
              :verified, :average_rating, :total_trips, :avatar, :agency_logo,
              :years_experience, :created_at,
              :youtube_url, :instagram_url, :tiktok_url, :twitter_url, :website_url,
@@ -34,12 +34,6 @@ class AgencySerializer < ActiveModel::Serializer
     object.cover_photo.attached? ? Rails.application.routes.url_helpers.url_for(object.cover_photo) : nil
   rescue StandardError
     nil
-  end
-
-  def phone
-    # Only show phone if the requesting context allows it
-    # By default, hide phone in public listing
-    instance_options[:show_phone] ? object.phone : nil
   end
 
   def created_at

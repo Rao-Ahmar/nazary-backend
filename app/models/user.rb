@@ -47,6 +47,9 @@ class User < ApplicationRecord
   # Couple Requests (traveler)
   has_many :couple_requests, dependent: :destroy
 
+  # Corporate Trip Requests
+  has_many :corporate_trip_requests, dependent: :destroy
+
   # Trip Preferences
   has_one :trip_preference, dependent: :destroy
 

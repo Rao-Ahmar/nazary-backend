@@ -4,9 +4,7 @@ class TripRequestSerializer < ActiveModel::Serializer
              :destination, :start_date, :end_date, :seats,
              :category, :budget, :note, :status, :created_at
 
-  # Phone visibility: only when status is accepted
-  attribute :traveler_phone, if: -> { object.accepted? }
-  attribute :planner_phone, if: -> { object.accepted? }
+  # Phones hidden — admin is the middleman
 
   def id
     object.id.to_s
@@ -26,10 +24,6 @@ class TripRequestSerializer < ActiveModel::Serializer
     nil
   end
 
-  def traveler_phone
-    object.user.phone
-  end
-
   def planner_id
     object.planner_id.to_s
   end
@@ -42,10 +36,6 @@ class TripRequestSerializer < ActiveModel::Serializer
     object.planner.avatar.attached? ? Rails.application.routes.url_helpers.url_for(object.planner.avatar) : nil
   rescue StandardError
     nil
-  end
-
-  def planner_phone
-    object.planner.phone
   end
 
   def start_date

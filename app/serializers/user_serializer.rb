@@ -2,7 +2,8 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id, :name, :email, :role, :admin, :avatar, :phone, :created_at,
              :profile_completed, :notifications_enabled,
              :referral_code, :referred_by,
-             :points, :completed_trips_count
+             :points, :completed_trips_count,
+             :corporate_trips_count, :corporate_level
 
   # Planner-only fields
   attributes :bio, :guild, :rating, :trips_hosted, :total_reviews,

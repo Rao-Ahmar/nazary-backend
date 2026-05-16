@@ -1,7 +1,7 @@
 class TripDetailSerializer < TripListSerializer
   attributes :subtitle, :description, :gallery, :total_seats, :status,
              :highlights, :itinerary, :reviews, :start_date, :end_date, :created_at, :recent_updates,
-             :trip_type, :is_premium, :recurring_rule, :my_booking_status
+             :trip_type, :is_premium, :recurring_rule, :my_booking_status, :my_booking_id
 
   def gallery
     object.gallery.map do |img|
@@ -32,7 +32,19 @@ class TripDetailSerializer < TripListSerializer
   end
 
   def my_booking_status
-    return nil unless scope.present? && scope.traveler?
-    object.bookings.find_by(user: scope)&.status
+    my_booking&.status
+  end
+
+  def my_booking_id
+    my_booking&.id&.to_s
+  end
+
+  private
+
+  def my_booking
+    return @my_booking if defined?(@my_booking)
+    @my_booking = if scope.present? && scope.traveler?
+                    object.bookings.find_by(user: scope)
+                  end
   end
 end
