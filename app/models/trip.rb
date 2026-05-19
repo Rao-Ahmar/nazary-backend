@@ -55,7 +55,7 @@ class Trip < ApplicationRecord
     }
 
   def seats_left
-    total_seats - bookings.confirmed.count - (seats_sold || 0)
+    total_seats - bookings.confirmed.sum(:seats) - (seats_sold || 0)
   end
 
   def average_rating

@@ -8,6 +8,7 @@ class Booking < ApplicationRecord
   scope :active, -> { where(status: [:pending, :confirmed, :approved, :payment_submitted]) }
 
   validates :amount, presence: true, numericality: { greater_than: 0 }
+  validates :seats, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :user_id, uniqueness: { scope: :trip_id, message: "has already requested to join this trip" }
   validate :traveler_role
   validate :seats_available, on: :create
@@ -20,8 +21,9 @@ class Booking < ApplicationRecord
 
   def seats_available
     return unless trip
-    if trip.seats_left <= 0
-      errors.add(:base, "No seats available for this trip")
+    return unless seats.present? && seats > 0
+    if trip.seats_left < seats
+      errors.add(:base, "Not enough seats available (only #{trip.seats_left} left)")
     end
   end
 end

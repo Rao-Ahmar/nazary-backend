@@ -4,10 +4,10 @@ puts "Seeding Nazary..."
 # Reset everything for a clean seed
 ActiveStorage::Attachment.delete_all rescue nil
 ActiveStorage::Blob.delete_all rescue nil
-[PaymentProof, PaymentAccount, ArrangementRequest, CollectionTrip, Collection, BikeProfile, PlaceReview, Place,
- Notification, PlannerReview, TripRequest, Review, Booking, ItineraryDay, TripUpdate, Trip,
- CoupleRequest, OtpVerification, Category, User].each do |model|
-  model.delete_all
+%w[PaymentProof PaymentAccount ArrangementRequest CollectionTrip Collection BikeProfile PlaceReview Place
+   Notification PlannerReview TripRequest Review Booking ItineraryDay TripUpdate Trip
+   CoupleRequest OtpVerification Category User].each do |name|
+  name.constantize.delete_all
 rescue StandardError
   nil
 end
@@ -172,7 +172,10 @@ trip1 = Trip.create!(
     "Photography at Passu Cones"
   ]
 )
-attach_image(trip1, :hero_image, "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80", "hunza_hero.jpg")
+attach_image(trip1, :hero_image, "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=1200&q=80", "hunza_hero.jpg")
+attach_image(trip1, :gallery, "https://images.unsplash.com/photo-1566837945700-30057527ade0?w=800&q=80", "hunza_gallery_1.jpg")
+attach_image(trip1, :gallery, "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "hunza_gallery_2.jpg")
+attach_image(trip1, :gallery, "https://images.unsplash.com/photo-1614094082869-cd4e4b2905c7?w=800&q=80", "hunza_gallery_3.jpg")
 
 [
   [1, "Islamabad to Karimabad", "Fly to Gilgit, drive to Karimabad. Evening walk through the old bazaar."],
@@ -207,7 +210,10 @@ trip2 = Trip.create!(
     "Traditional Diamer hospitality"
   ]
 )
-attach_image(trip2, :hero_image, "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=800&q=80", "fairy_meadows_hero.jpg")
+attach_image(trip2, :hero_image, "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=1200&q=80", "fairy_meadows_hero.jpg")
+attach_image(trip2, :gallery, "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80", "fairy_gallery_1.jpg")
+attach_image(trip2, :gallery, "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80", "fairy_gallery_2.jpg")
+attach_image(trip2, :gallery, "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80", "fairy_gallery_3.jpg")
 
 [
   [1, "Islamabad to Raikot Bridge", "Drive along the Karakoram Highway to Raikot Bridge. Overnight at Tato village."],
@@ -243,7 +249,10 @@ trip3 = Trip.create!(
     "Cold desert safari"
   ]
 )
-attach_image(trip3, :hero_image, "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800&q=80", "skardu_hero.jpg")
+attach_image(trip3, :hero_image, "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=1200&q=80", "skardu_hero.jpg")
+attach_image(trip3, :gallery, "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "skardu_gallery_1.jpg")
+attach_image(trip3, :gallery, "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80", "skardu_gallery_2.jpg")
+attach_image(trip3, :gallery, "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", "skardu_gallery_3.jpg")
 
 [
   [1, "Islamabad to Skardu", "Scenic flight to Skardu. Check-in & rest. Evening Skardu Fort visit."],
@@ -280,7 +289,10 @@ trip4 = Trip.create!(
     "10 days of pure mountain riding"
   ]
 )
-attach_image(trip4, :hero_image, "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800&q=80", "kkh_bike_hero.jpg")
+attach_image(trip4, :hero_image, "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200&q=80", "kkh_bike_hero.jpg")
+attach_image(trip4, :gallery, "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=800&q=80", "kkh_gallery_1.jpg")
+attach_image(trip4, :gallery, "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800&q=80", "kkh_gallery_2.jpg")
+attach_image(trip4, :gallery, "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80", "kkh_gallery_3.jpg")
 
 [
   [1, "Islamabad Departure", "Gear check, briefing, ride to Abbottabad"],
@@ -320,7 +332,10 @@ trip5 = Trip.create!(
     "Mingora bazaar shopping"
   ]
 )
-attach_image(trip5, :hero_image, "https://images.unsplash.com/photo-1597074866923-dc0589150358?w=800&q=80", "swat_hero.jpg")
+attach_image(trip5, :hero_image, "https://images.unsplash.com/photo-1597074866923-dc0589150358?w=1200&q=80", "swat_hero.jpg")
+attach_image(trip5, :gallery, "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=800&q=80", "swat_gallery_1.jpg")
+attach_image(trip5, :gallery, "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80", "swat_gallery_2.jpg")
+attach_image(trip5, :gallery, "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80", "swat_gallery_3.jpg")
 
 [
   [1, "Islamabad to Mingora", "Drive via Motorway. Check-in at hotel. Evening bazaar walk."],
@@ -353,7 +368,10 @@ trip6 = Trip.create!(
     "Ratti Gali Lake trek (optional)"
   ]
 )
-attach_image(trip6, :hero_image, "https://images.unsplash.com/photo-1566837945700-30057527ade0?w=800&q=80", "neelum_hero.jpg")
+attach_image(trip6, :hero_image, "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1200&q=80", "neelum_hero.jpg")
+attach_image(trip6, :gallery, "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80", "neelum_gallery_1.jpg")
+attach_image(trip6, :gallery, "https://images.unsplash.com/photo-1440581572325-0bea30075d9d?w=800&q=80", "neelum_gallery_2.jpg")
+attach_image(trip6, :gallery, "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=800&q=80", "neelum_gallery_3.jpg")
 
 [
   [1, "Islamabad to Muzaffarabad", "Drive to Muzaffarabad. Visit Red Fort. Check-in."],
@@ -387,7 +405,10 @@ trip7 = Trip.create!(
     "Warm bonfire nights"
   ]
 )
-attach_image(trip7, :hero_image, "https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?w=800&q=80", "naltar_hero.jpg")
+attach_image(trip7, :hero_image, "https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?w=1200&q=80", "naltar_hero.jpg")
+attach_image(trip7, :gallery, "https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=800&q=80", "naltar_gallery_1.jpg")
+attach_image(trip7, :gallery, "https://images.unsplash.com/photo-1482192505345-5655af888cc4?w=800&q=80", "naltar_gallery_2.jpg")
+attach_image(trip7, :gallery, "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=800&q=80", "naltar_gallery_3.jpg")
 
 [
   [1, "Gilgit to Naltar", "Drive from Gilgit to Naltar Valley. Settle into lodge."],
@@ -421,7 +442,10 @@ trip8 = Trip.create!(
     "Spa & wellness session"
   ]
 )
-attach_image(trip8, :hero_image, "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", "hunza_couple_hero.jpg")
+attach_image(trip8, :hero_image, "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80", "hunza_couple_hero.jpg")
+attach_image(trip8, :gallery, "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80", "couple_gallery_1.jpg")
+attach_image(trip8, :gallery, "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80", "couple_gallery_2.jpg")
+attach_image(trip8, :gallery, "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&q=80", "couple_gallery_3.jpg")
 
 [
   [1, "Arrival in Gilgit", "Private transfer to Karimabad. Check-in at boutique hotel. Welcome dinner."],
@@ -431,7 +455,148 @@ attach_image(trip8, :hero_image, "https://images.unsplash.com/photo-146947496802
   [5, "Departure", "Breakfast with mountain views. Transfer to Gilgit airport."]
 ].each { |day, title, desc| trip8.itinerary_days.create!(day: day, title: title, desc: desc) }
 
-puts "  Created #{Trip.count} trips with itineraries"
+# ─── Trip 9: Chitral & Kalash Valley ─────────────────────
+trip9 = Trip.create!(
+  host: planner3,
+  title: "Chitral & Kalash Cultural Tour",
+  subtitle: "Ancient Traditions of the Hindu Kush",
+  description: "Discover the unique Kalash people in the valleys of Chitral. Visit Bumburet, Rumbur, and Birir valleys. Attend local festivals, experience their ancient pagan traditions, and explore the dramatic Hindu Kush mountain scenery.",
+  location: "Chitral, Khyber Pakhtunkhwa",
+  price: 48000,
+  currency: "PKR",
+  duration: "6 days",
+  start_date: "2026-07-15",
+  end_date: "2026-07-20",
+  total_seats: 12,
+  status: :active,
+  trip_type: :casual,
+  tags: ["Adventures", "Friends Trips"],
+  highlights: [
+    "Visit three Kalash valleys",
+    "Attend traditional Kalash ceremonies",
+    "Cross Lowari Pass (3,118m)",
+    "Explore Chitral Fort",
+    "Taste Kalash wine and local food",
+    "Hindu Kush mountain scenery"
+  ]
+)
+attach_image(trip9, :hero_image, "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80", "chitral_hero.jpg")
+attach_image(trip9, :gallery, "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", "chitral_gallery_1.jpg")
+attach_image(trip9, :gallery, "https://images.unsplash.com/photo-1440581572325-0bea30075d9d?w=800&q=80", "chitral_gallery_2.jpg")
+
+[
+  [1, "Islamabad to Chitral", "Fly to Chitral. Check-in. Evening walk at Chitral bazaar."],
+  [2, "Chitral Fort & City", "Explore Chitral Fort, Shahi Mosque. Visit the polo ground."],
+  [3, "Bumburet Valley", "Drive to Bumburet. Meet Kalash families. Cultural immersion."],
+  [4, "Rumbur Valley", "Trek between valleys. Visit ancient temples. Traditional music night."],
+  [5, "Birir Valley", "Visit the most traditional Kalash valley. Cheese making. Photography."],
+  [6, "Return", "Morning drive back to Chitral. Afternoon flight to Islamabad."]
+].each { |day, title, desc| trip9.itinerary_days.create!(day: day, title: title, desc: desc) }
+
+# ─── Trip 10: Kumrat Valley Escape ──────────────────────
+trip10 = Trip.create!(
+  host: planner,
+  title: "Kumrat Valley Paradise",
+  subtitle: "Pakistan's Best Kept Secret",
+  description: "Explore the untouched beauty of Kumrat Valley in Upper Dir. Lush green meadows, the crystal-clear Panjkora River, dense pine forests, and Jahaz Banda (the meadow that looks like it's floating). A perfect escape from city life.",
+  location: "Kumrat Valley, KPK",
+  price: 30000,
+  currency: "PKR",
+  duration: "4 days",
+  start_date: "2026-08-05",
+  end_date: "2026-08-08",
+  total_seats: 14,
+  status: :active,
+  trip_type: :casual,
+  tags: ["Adventures", "Budget Friendly"],
+  highlights: [
+    "Camp by the Panjkora River",
+    "Trek to Jahaz Banda meadow",
+    "Swimming in natural pools",
+    "Trout fishing",
+    "Night camping under the stars"
+  ]
+)
+attach_image(trip10, :hero_image, "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80", "kumrat_hero.jpg")
+attach_image(trip10, :gallery, "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80", "kumrat_gallery_1.jpg")
+attach_image(trip10, :gallery, "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=800&q=80", "kumrat_gallery_2.jpg")
+
+[
+  [1, "Islamabad to Thall", "Drive to Thall, Upper Dir. Check-in at guesthouse."],
+  [2, "Kumrat Valley", "Enter the valley. Set up riverside camp. Afternoon fishing."],
+  [3, "Jahaz Banda Trek", "Full day trek to Jahaz Banda. Packed lunch. Return for bonfire."],
+  [4, "Return to Islamabad", "Pack up camp. Scenic drive back via Dir."]
+].each { |day, title, desc| trip10.itinerary_days.create!(day: day, title: title, desc: desc) }
+
+# ─── Trip 11: Ratti Gali Lake Trek ──────────────────────
+trip11 = Trip.create!(
+  host: planner2,
+  title: "Ratti Gali Lake Trek",
+  subtitle: "Kashmir's Alpine Jewel",
+  description: "A challenging but rewarding trek to Ratti Gali Lake at 12,130 feet in the Neelum Valley. Crystal blue glacial waters surrounded by snow-capped peaks. For experienced hikers who want an unforgettable alpine experience.",
+  location: "Neelum Valley, Azad Kashmir",
+  price: 25000,
+  currency: "PKR",
+  duration: "3 days",
+  start_date: "2026-07-25",
+  end_date: "2026-07-27",
+  total_seats: 8,
+  status: :active,
+  trip_type: :casual,
+  tags: ["Adventures", "Budget Friendly"],
+  highlights: [
+    "Trek to 12,130 feet altitude",
+    "Crystal blue glacial lake",
+    "Camp beside the lake",
+    "Snow-capped peak panoramas",
+    "Wildflower meadows en route"
+  ]
+)
+attach_image(trip11, :hero_image, "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1200&q=80", "ratti_gali_hero.jpg")
+attach_image(trip11, :gallery, "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=800&q=80", "ratti_gallery_1.jpg")
+attach_image(trip11, :gallery, "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80", "ratti_gallery_2.jpg")
+
+[
+  [1, "Islamabad to Dowarian", "Drive to Dowarian village in Neelum Valley. Night rest."],
+  [2, "Trek to Ratti Gali", "6-hour trek through meadows and forests to the lake. Camp setup."],
+  [3, "Lake Day & Return", "Sunrise photography. Trek back to Dowarian. Drive to Islamabad."]
+].each { |day, title, desc| trip11.itinerary_days.create!(day: day, title: title, desc: desc) }
+
+# ─── Trip 12: Naran & Lake Saif-ul-Malook ────────────────
+trip12 = Trip.create!(
+  host: planner,
+  title: "Naran & Saif-ul-Malook",
+  subtitle: "The Legendary Lake of Kaghan",
+  description: "Visit the legendary Lake Saif-ul-Malook surrounded by fairy-tale peaks. Explore Naran town, drive Babusar Pass, and witness the beauty of Kaghan Valley in summer. Perfect for families and first-time northern visitors.",
+  location: "Naran, Kaghan Valley",
+  price: 22000,
+  currency: "PKR",
+  duration: "3 days",
+  start_date: "2026-06-20",
+  end_date: "2026-06-22",
+  total_seats: 20,
+  status: :active,
+  trip_type: :family,
+  tags: ["Family Trips", "Budget Friendly"],
+  highlights: [
+    "Visit Lake Saif-ul-Malook",
+    "Jeep ride to the lake",
+    "Lulusar Lake stop",
+    "Naran town exploration",
+    "Trout fish BBQ dinner"
+  ]
+)
+attach_image(trip12, :hero_image, "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&q=80", "naran_hero.jpg")
+attach_image(trip12, :gallery, "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80", "naran_gallery_1.jpg")
+attach_image(trip12, :gallery, "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80", "naran_gallery_2.jpg")
+
+[
+  [1, "Islamabad to Naran", "Drive via Mansehra to Naran. Evening town walk."],
+  [2, "Lake Saif-ul-Malook", "Jeep ride to the lake. Photography, boat ride. Return to Naran."],
+  [3, "Lulusar Lake & Return", "Morning visit to Lulusar Lake. Drive back to Islamabad."]
+].each { |day, title, desc| trip12.itinerary_days.create!(day: day, title: title, desc: desc) }
+
+puts "  Created #{Trip.count} trips with itineraries and gallery images"
 
 # ═══════════════════════════════════════════════════════════
 #  BOOKINGS
@@ -517,10 +682,36 @@ places_data = [
   { name: "Naran", region: "Khyber Pakhtunkhwa", description: "Popular hill station in Kaghan Valley. Base for trips to Lake Saif-ul-Malook and Babusar Pass.", latitude: 34.9000, longitude: 73.6500 }
 ]
 
+place_images = {
+  "Hunza Valley" => "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=1200&q=80",
+  "Fairy Meadows" => "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=1200&q=80",
+  "Skardu" => "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=1200&q=80",
+  "Swat Valley" => "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1200&q=80",
+  "Neelum Valley" => "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1200&q=80",
+  "Attabad Lake" => "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=1200&q=80",
+  "Kumrat Valley" => "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80",
+  "Deosai National Park" => "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+  "Khunjerab Pass" => "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80",
+  "Naltar Valley" => "https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=1200&q=80",
+  "Rakaposhi Base Camp" => "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80",
+  "Kalam" => "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80",
+  "Chitral" => "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80",
+  "Ratti Gali Lake" => "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1200&q=80",
+  "Shogran" => "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80",
+  "Shigar" => "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1200&q=80",
+  "Passu" => "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=1200&q=80",
+  "Malam Jabba" => "https://images.unsplash.com/photo-1482192505345-5655af888cc4?w=1200&q=80",
+  "Lahore Old City" => "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=1200&q=80",
+  "Naran" => "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&q=80"
+}
+
 places_data.each do |pd|
-  Place.create!(name: pd[:name], region: pd[:region], description: pd[:description], latitude: pd[:latitude], longitude: pd[:longitude])
+  place = Place.create!(name: pd[:name], region: pd[:region], description: pd[:description], latitude: pd[:latitude], longitude: pd[:longitude])
+  if place_images[pd[:name]]
+    attach_image(place, :cover_image, place_images[pd[:name]], "#{pd[:name].parameterize}_cover.jpg")
+  end
 end
-puts "  Created #{Place.count} places"
+puts "  Created #{Place.count} places with cover images"
 
 # ═══════════════════════════════════════════════════════════
 #  PLACE REVIEWS

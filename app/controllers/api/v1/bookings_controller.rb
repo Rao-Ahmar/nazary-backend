@@ -5,15 +5,16 @@ module Api
 
       def create
         trip = Trip.find(params[:trip_id])
-        advance_fee = (trip.price * 0.01).ceil
-        booking = current_user.bookings.new(trip: trip, amount: advance_fee)
+        seats = (params[:seats] || 1).to_i
+        advance_fee = (trip.price * seats * 0.01).ceil
+        booking = current_user.bookings.new(trip: trip, amount: advance_fee, seats: seats)
 
         if booking.save
           # Notify planner
           NotificationService.create(
             user: trip.host,
             title: "New Join Request",
-            body: "#{current_user.name} wants to join #{trip.title}. Phone: #{current_user.phone || 'not provided'}",
+            body: "#{current_user.name} wants to join #{trip.title} (#{seats} #{'seat'.pluralize(seats)}). Phone: #{current_user.phone || 'not provided'}",
             notification_type: :booking_update,
             data: { trip_id: trip.id.to_s, booking_id: booking.id.to_s }
           )

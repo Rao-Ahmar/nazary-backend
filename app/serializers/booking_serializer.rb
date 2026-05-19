@@ -1,6 +1,6 @@
 class BookingSerializer < ActiveModel::Serializer
   attributes :id, :trip_id, :traveler_id, :traveler_name, :traveler_avatar,
-             :status, :amount, :admin_note, :created_at
+             :status, :amount, :seats, :admin_note, :created_at
 
   attribute :trip_title, if: -> { instance_options[:planner_view] }
   attribute :trip_hero_image, if: -> { instance_options[:planner_view] }

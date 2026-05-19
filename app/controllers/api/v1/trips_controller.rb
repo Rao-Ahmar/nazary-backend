@@ -1,6 +1,8 @@
 module Api
   module V1
     class TripsController < BaseController
+      skip_before_action :authenticate!, only: [:index, :show, :featured]
+
       def index
         trips = Trip.active.upcoming.includes(:host, :reviews, :bookings, hero_image_attachment: :blob)
 

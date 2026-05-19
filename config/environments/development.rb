@@ -53,8 +53,8 @@ Rails.application.configure do
     .detect { |addr| addr.ipv4_private? }
     &.ip_address || "localhost"
 
-  config.action_mailer.default_url_options = { host: local_ip, port: 3000 }
-  Rails.application.routes.default_url_options = { host: local_ip, port: 3000 }
+  config.action_mailer.default_url_options = { host: local_ip, port: 4000 }
+  Rails.application.routes.default_url_options = { host: local_ip, port: 4000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
