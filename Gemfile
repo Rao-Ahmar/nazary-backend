@@ -17,7 +17,7 @@ gem "kaminari"
 gem "pg_search"
 
 # Active Storage
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
 gem "aws-sdk-s3", require: false
 
 # FCM Push Notifications
