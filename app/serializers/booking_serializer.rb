@@ -1,10 +1,7 @@
 class BookingSerializer < ActiveModel::Serializer
   attributes :id, :trip_id, :traveler_id, :traveler_name, :traveler_avatar,
-             :status, :amount, :seats, :admin_note, :created_at
-
-  attribute :trip_title, if: -> { instance_options[:planner_view] }
-  attribute :trip_hero_image, if: -> { instance_options[:planner_view] }
-  attribute :trip_location, if: -> { instance_options[:planner_view] }
+             :status, :amount, :seats, :admin_note, :created_at,
+             :trip_title, :trip_hero_image, :trip_location
   # Phone hidden — admin is the middleman
 
   def id
