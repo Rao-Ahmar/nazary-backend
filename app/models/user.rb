@@ -75,7 +75,8 @@ class User < ApplicationRecord
   # has_many :sent_messages, class_name: "Message", foreign_key: :sender_id
 
   validates :name, presence: true
-  validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validates :email, presence: true, uniqueness: { case_sensitive: false },
+                    format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }
   validates :role, presence: true
   validates :phone, format: {
     with: /\A(\+92\d{10}|0\d{10})\z/,
