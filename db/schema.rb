@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_19_015416) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_03_073534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -55,6 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_19_015416) do
     t.bigint "linked_trip_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "agency_id"
+    t.index ["agency_id"], name: "index_arrangement_requests_on_agency_id"
     t.index ["linked_trip_id"], name: "index_arrangement_requests_on_linked_trip_id"
     t.index ["status"], name: "index_arrangement_requests_on_status"
     t.index ["traveler_id"], name: "index_arrangement_requests_on_traveler_id"
@@ -270,6 +272,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_19_015416) do
     t.decimal "longitude", precision: 10, scale: 7
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "elevation_meters"
     t.index ["region"], name: "index_places_on_region"
   end
 
@@ -444,6 +447,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_19_015416) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "arrangement_requests", "trips", column: "linked_trip_id"
+  add_foreign_key "arrangement_requests", "users", column: "agency_id"
   add_foreign_key "arrangement_requests", "users", column: "traveler_id"
   add_foreign_key "bike_profiles", "users"
   add_foreign_key "bookings", "trips"

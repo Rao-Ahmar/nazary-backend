@@ -1,7 +1,7 @@
 class BookingSerializer < ActiveModel::Serializer
   attributes :id, :trip_id, :traveler_id, :traveler_name, :traveler_avatar,
              :status, :amount, :seats, :admin_note, :created_at,
-             :trip_title, :trip_hero_image, :trip_location
+             :trip_title, :trip_hero_image, :trip_location, :trip_price
   # Phone hidden — admin is the middleman
 
   def id
@@ -42,6 +42,10 @@ class BookingSerializer < ActiveModel::Serializer
 
   def trip_location
     object.trip.location
+  end
+
+  def trip_price
+    object.trip.price
   end
 
 end

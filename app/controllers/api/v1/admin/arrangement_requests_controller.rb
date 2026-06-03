@@ -3,7 +3,7 @@ module Api
     module Admin
       class ArrangementRequestsController < BaseController
         def index
-          requests = ArrangementRequest.includes(:traveler, :linked_trip).order(created_at: :desc)
+          requests = ArrangementRequest.includes(:traveler, :linked_trip, :agency).order(created_at: :desc)
           requests = requests.where(status: params[:status]) if params[:status].present?
           result = paginate(requests)
           render json: result[:data], each_serializer: ArrangementRequestSerializer, meta: result[:meta]

@@ -22,7 +22,7 @@ module Api
 
       def arrangement_params
         params.permit(:preferred_destination, :travel_dates, :group_size,
-                      :budget_min, :budget_max, :special_notes)
+                      :budget_min, :budget_max, :special_notes, :agency_id)
       end
     end
   end

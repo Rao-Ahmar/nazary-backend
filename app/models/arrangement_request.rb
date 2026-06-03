@@ -1,5 +1,6 @@
 class ArrangementRequest < ApplicationRecord
   belongs_to :traveler, class_name: "User"
+  belongs_to :agency, class_name: "User", optional: true
   belongs_to :linked_trip, class_name: "Trip", optional: true
 
   enum :status, { pending: 0, in_review: 1, arranged: 2, rejected: 3 }
