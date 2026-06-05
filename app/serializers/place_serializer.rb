@@ -1,6 +1,6 @@
 class PlaceSerializer < ActiveModel::Serializer
   attributes :id, :name, :region, :description, :latitude, :longitude,
-             :cover_image, :rating, :review_count
+             :elevation_meters, :cover_image, :rating, :review_count
 
   def id
     object.id.to_s

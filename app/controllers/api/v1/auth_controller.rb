@@ -112,7 +112,8 @@ module Api
         user = User.find_by(google_uid: google_uid) || User.find_by(email: email)
 
         if user.nil?
-          user = User.new(name: name, email: email, google_uid: google_uid, role: :traveler)
+          selected_role = %w[traveler planner].include?(params[:role]) ? params[:role] : "traveler"
+          user = User.new(name: name, email: email, google_uid: google_uid, role: selected_role)
           unless user.save
             return render json: { error: user.errors.full_messages.join(", ") }, status: :unprocessable_entity
           end

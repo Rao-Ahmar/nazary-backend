@@ -58,6 +58,9 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "16.170.146.169" }
 
+  # Set default URL options for Active Storage and other URL helpers
+  Rails.application.routes.default_url_options = { host: "16.170.146.169", protocol: "http" }
+
   # Gmail SMTP
   config.action_mailer.smtp_settings = {
     address: "smtp.gmail.com",

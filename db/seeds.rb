@@ -657,56 +657,139 @@ PlannerReview.create!(user: traveler2, planner: planner3, rating: 4, text: "Haid
 puts "  Created #{PlannerReview.count} planner reviews"
 
 # ═══════════════════════════════════════════════════════════
-#  PLACES
+#  PLACES — Real Northern Pakistan Destinations
 # ═══════════════════════════════════════════════════════════
 places_data = [
-  { name: "Hunza Valley", region: "Gilgit-Baltistan", description: "A stunning valley in the Karakoram range, known for breathtaking views of Rakaposhi, ancient forts, and warm Hunzai hospitality.", latitude: 36.3167, longitude: 74.6500 },
-  { name: "Fairy Meadows", region: "Gilgit-Baltistan", description: "A grassland at the base of Nanga Parbat (8,126m). Paradise for trekkers with unreal mountain views.", latitude: 35.3756, longitude: 74.5881 },
-  { name: "Skardu", region: "Gilgit-Baltistan", description: "Gateway to K2 and the world's highest peaks. Home to Shangrila Resort, Deosai, and stunning lakes.", latitude: 35.2971, longitude: 75.6333 },
-  { name: "Swat Valley", region: "Khyber Pakhtunkhwa", description: "The Switzerland of Pakistan. Lush valleys, Buddhist ruins, and crystal clear rivers.", latitude: 35.2227, longitude: 72.3526 },
-  { name: "Neelum Valley", region: "Azad Kashmir", description: "A beautiful valley with dense forests, streams, and freshwater lakes. Still largely untouched.", latitude: 34.5978, longitude: 73.9068 },
-  { name: "Attabad Lake", region: "Gilgit-Baltistan", description: "A turquoise lake formed in 2010 by a landslide. Popular for boating and jet skiing.", latitude: 36.3167, longitude: 74.8500 },
-  { name: "Kumrat Valley", region: "Khyber Pakhtunkhwa", description: "A hidden paradise in Upper Dir, with lush meadows and crystal clear rivers.", latitude: 35.5172, longitude: 72.2275 },
-  { name: "Deosai National Park", region: "Gilgit-Baltistan", description: "The second highest plateau in the world at 4,114m. Home to Himalayan brown bears.", latitude: 35.0897, longitude: 75.4033 },
-  { name: "Khunjerab Pass", region: "Gilgit-Baltistan", description: "Highest paved international border crossing at 4,693m on the China-Pakistan border.", latitude: 36.8500, longitude: 75.4167 },
-  { name: "Naltar Valley", region: "Gilgit-Baltistan", description: "Famous for its three colorful lakes and ski resort. A hidden gem near Gilgit.", latitude: 36.1667, longitude: 74.1833 },
-  { name: "Rakaposhi Base Camp", region: "Gilgit-Baltistan", description: "Trek to the base of Rakaposhi (7,788m) from Minapin village. Stunning views.", latitude: 36.1500, longitude: 74.5333 },
-  { name: "Kalam", region: "Khyber Pakhtunkhwa", description: "A green town in upper Swat with mountains, waterfalls, and dense forests.", latitude: 35.4897, longitude: 72.5861 },
-  { name: "Chitral", region: "Khyber Pakhtunkhwa", description: "Remote valley bordering Afghanistan, home to the Kalasha people and their ancient culture.", latitude: 35.8517, longitude: 71.7864 },
-  { name: "Ratti Gali Lake", region: "Azad Kashmir", description: "An alpine glacial lake at 12,130 feet in the Neelum Valley. Crystal blue waters surrounded by peaks.", latitude: 34.7833, longitude: 74.3667 },
-  { name: "Shogran", region: "Khyber Pakhtunkhwa", description: "A hill station in Kaghan Valley at 7,749 feet with views of Makra and Malika Parbat.", latitude: 34.6333, longitude: 73.4833 },
-  { name: "Shigar", region: "Gilgit-Baltistan", description: "Home to the restored Shigar Fort (now a heritage hotel). Gateway to Baltoro and K2.", latitude: 35.4264, longitude: 75.7500 },
-  { name: "Passu", region: "Gilgit-Baltistan", description: "Famous for its cathedral-shaped cones, glacier, and the thrilling suspension bridge over Hunza River.", latitude: 36.4881, longitude: 74.8917 },
-  { name: "Malam Jabba", region: "Khyber Pakhtunkhwa", description: "Pakistan's premier ski resort in Swat. Skiing in winter, chairlift views year-round.", latitude: 35.1581, longitude: 72.5728 },
-  { name: "Lahore Old City", region: "Punjab", description: "Cultural heart of Pakistan. Badshahi Mosque, Lahore Fort, and the vibrant Walled City food street.", latitude: 31.5820, longitude: 74.3293 },
-  { name: "Naran", region: "Khyber Pakhtunkhwa", description: "Popular hill station in Kaghan Valley. Base for trips to Lake Saif-ul-Malook and Babusar Pass.", latitude: 34.9000, longitude: 73.6500 }
+  # ── Galyat Region ──────────────────────────────────────
+  { name: "Mushkpuri Top", region: "Galyat", description: "The highest peak in the Galyat range at 2,800m, offering a rewarding short trek through dense pine and oak forests with panoramic 360-degree views of the Abbottabad hills and snow-clad Kashmir peaks.", latitude: 34.0850, longitude: 73.3850, elevation_meters: 2800 },
+  { name: "Miranjani Top", region: "Galyat", description: "The highest peak in the Galyat hills near Nathia Gali at 2,992m. Rewards trekkers with sweeping views of the Himalayan foothills — one of the most accessible high-altitude hikes in Pakistan.", latitude: 34.0739, longitude: 73.3783, elevation_meters: 2992 },
+
+  # ── Kaghan Valley ──────────────────────────────────────
+  { name: "Naran", region: "Kaghan Valley", description: "A bustling hill station in the Kaghan Valley and gateway to the legendary Lake Saif-ul-Malook. Sits along the Kunhar River surrounded by snow-capped peaks.", latitude: 34.9090, longitude: 73.6500, elevation_meters: 2409 },
+  { name: "Kaghan", region: "Kaghan Valley", description: "The historic namesake town of the Kaghan Valley, nestled along the Kunhar River with terraced fields and traditional wooden houses — a quieter alternative to Naran.", latitude: 34.7500, longitude: 73.5167, elevation_meters: 1981 },
+  { name: "Sharan Forest", region: "Kaghan Valley", description: "A pristine pine forest plateau with untouched alpine meadows and sweeping views of snow-covered peaks. One of Pakistan's best-kept secrets for those seeking solitude in nature.", latitude: 34.7711, longitude: 73.3928, elevation_meters: 2400 },
+  { name: "Shogran", region: "Kaghan Valley", description: "A picturesque hill station in the lower Kaghan Valley with stunning views of Makra Peak and Malika Parbat, accessible mountain beauty with comfortable guesthouses.", latitude: 34.6333, longitude: 73.4833, elevation_meters: 2362 },
+
+  # ── Azad Kashmir ───────────────────────────────────────
+  { name: "Neelum Valley", region: "Azad Kashmir", description: "A 200km-long valley of lush green forests, gushing rivers, and wooden bridges, still largely untouched by mass tourism — considered one of the most beautiful valleys in South Asia.", latitude: 34.5978, longitude: 73.9068, elevation_meters: nil },
+  { name: "Sharda", region: "Azad Kashmir", description: "An ancient Buddhist learning center on the banks of the Neelum River, featuring the atmospheric ruins of Sharda Peeth — a critical cultural heritage site in Azad Kashmir.", latitude: 34.6833, longitude: 74.1167, elevation_meters: 1981 },
+  { name: "Kel", region: "Azad Kashmir", description: "One of the last accessible villages in the upper Neelum Valley, sitting at the confluence of two mountain rivers amid towering peaks — base camp for the Ratti Gali Lake trek.", latitude: 34.7986, longitude: 74.2361, elevation_meters: 2097 },
+  { name: "Arang Kel", region: "Azad Kashmir", description: "A remote hilltop settlement perched above Kel, reachable only by a steep hike or chairlift. Jaw-dropping views of snow-clad peaks and terraced fields earned it the name 'Pearl of Neelum Valley.'", latitude: 34.8000, longitude: 74.2500, elevation_meters: 2554 },
+  { name: "Taobat", region: "Azad Kashmir", description: "The last village on the Neelum Valley road near the Line of Control, surrounded by towering mountains and pristine glacial streams — an untouched frontier for adventurous travelers.", latitude: 34.8150, longitude: 74.3028, elevation_meters: 2012 },
+  { name: "Shounter Valley", region: "Azad Kashmir", description: "A breathtaking side valley branching off Neelum, home to the glacial Shounter Lake at over 3,000m surrounded by wildflower meadows — one of Kashmir's most pristine alpine environments.", latitude: 34.7417, longitude: 74.3111, elevation_meters: 3100 },
+  { name: "Leepa Valley", region: "Azad Kashmir", description: "Accessible via the dramatic Reshian Pass, Leepa is a postcard-perfect valley of terraced rice fields, walnut orchards, and traditional Kashmiri wooden houses.", latitude: 34.3833, longitude: 73.9500, elevation_meters: 1921 },
+  { name: "Ratti Gali Lake", region: "Azad Kashmir", description: "A pristine alpine glacial lake at 3,697m in the upper Neelum Valley, shimmering in turquoise and blue surrounded by snow-capped peaks and wildflower meadows.", latitude: 34.7833, longitude: 74.3667, elevation_meters: 3697 },
+
+  # ── Diamer / Nanga Parbat Region ───────────────────────
+  { name: "Fairy Meadows", region: "Diamer", description: "A legendary alpine meadow at 3,300m with a front-row seat to the massive north face of Nanga Parbat (8,126m). Camping under billions of stars at the edge of the world.", latitude: 35.3756, longitude: 74.5881, elevation_meters: 3300 },
+  { name: "Beyal Camp", region: "Diamer", description: "A high-altitude camp above Fairy Meadows offering dramatically closer views of Nanga Parbat's Rakhiot Face and glacier — one of the most awe-inspiring mountain panoramas on Earth.", latitude: 35.3583, longitude: 74.5750, elevation_meters: 3680 },
+  { name: "Nanga Parbat Base Camp", region: "Diamer", description: "Base camp of the world's ninth-highest mountain (8,126m), known as the 'Killer Mountain.' The Rupal Face here is the tallest mountain face in the world at over 4,600m vertical rise.", latitude: 35.2333, longitude: 74.6333, elevation_meters: 3967 },
+
+  # ── Chitral Region ─────────────────────────────────────
+  { name: "Chitral Town", region: "Chitral", description: "Capital of the former Chitral princely state in the Hindu Kush, featuring a historic fort, polo ground, and bustling bazaars — gateway to the unique Kalash valleys.", latitude: 35.8517, longitude: 71.7864, elevation_meters: 1498 },
+  { name: "Kalash Valley", region: "Chitral", description: "Home to the ancient Kalash people who practice a unique pagan religion with vibrant festivals and colorful dress — a fascinating culture that has survived for millennia in the remote Hindu Kush.", latitude: 35.7292, longitude: 71.6833, elevation_meters: 1640 },
+
+  # ── Swat Region ────────────────────────────────────────
+  { name: "Swat Valley", region: "Swat", description: "Known as the 'Switzerland of Pakistan,' Swat is a lush green paradise with ancient Buddhist ruins, crystal-clear rivers, and archaeological heritage rivaling anything in South Asia.", latitude: 35.2227, longitude: 72.3526, elevation_meters: nil },
+  { name: "Kalam", region: "Swat", description: "A verdant mountain town in upper Swat surrounded by dense forests, waterfalls, and alpine lakes including Mahodand — a launching point for some of the most scenic day trips in the valley.", latitude: 35.4897, longitude: 72.5861, elevation_meters: 2001 },
+  { name: "Malam Jabba", region: "Swat", description: "Pakistan's premier ski resort in the Swat hills, offering skiing and snowboarding in winter and year-round chairlift rides with panoramic mountain views.", latitude: 35.1581, longitude: 72.5728, elevation_meters: 2591 },
+
+  # ── Kumrat Region ──────────────────────────────────────
+  { name: "Kumrat Valley", region: "Kumrat", description: "A hidden paradise in Upper Dir with lush green meadows, the crystal-clear Panjkora River, and dense pine forests. Home to the otherworldly Jahaz Banda meadow.", latitude: 35.5172, longitude: 72.2275, elevation_meters: 2300 },
+
+  # ── Gilgit District & Surroundings ─────────────────────
+  { name: "Gilgit", region: "Gilgit-Baltistan", description: "Capital of Gilgit-Baltistan and main hub for Karakoram travel. Sits at the confluence of the Gilgit and Hunza rivers along the Karakoram Highway.", latitude: 35.9208, longitude: 74.3144, elevation_meters: 1500 },
+  { name: "Naltar Valley", region: "Gilgit-Baltistan", description: "Famous for its three brilliantly colored lakes (green, blue, and white), Naltar is a pine-forested alpine wonderland with one of Pakistan's few ski resorts.", latitude: 36.1667, longitude: 74.1833, elevation_meters: 2898 },
+  { name: "Rakaposhi Base Camp", region: "Gilgit-Baltistan", description: "Base camp trek to Rakaposhi (7,788m), one of the most beautiful peaks in the Karakoram. Increasingly dramatic close-up views of the mountain's massive glaciated face.", latitude: 36.1500, longitude: 74.5333, elevation_meters: 3200 },
+  { name: "Nagar Valley", region: "Gilgit-Baltistan", description: "Home to the Hopar Glacier and traditional Nagar culture, offering quieter mountain experiences and spectacular glacier views without the tourist crowds of Hunza.", latitude: 36.2000, longitude: 74.5833, elevation_meters: 2500 },
+
+  # ── Hunza Valley ───────────────────────────────────────
+  { name: "Hunza Valley", region: "Hunza", description: "The crown jewel of Gilgit-Baltistan — a spectacular mountain kingdom with 700-year-old forts, views of 7,000m+ peaks including Rakaposhi, and the legendary hospitality of the Hunzai people.", latitude: 36.3167, longitude: 74.6500, elevation_meters: 2438 },
+  { name: "Hussaini Suspension Bridge", region: "Hunza", description: "One of the most thrilling pedestrian bridges in the world, swaying over the turquoise Hunza River near Passu with missing planks making every step an adrenaline-pumping adventure.", latitude: 36.4250, longitude: 74.8583, elevation_meters: 2500 },
+  { name: "Borith Lake", region: "Hunza", description: "A serene high-altitude lake near Passu surrounded by the towering Passu Cones and Batura Glacier. A birdwatcher's paradise with mirror-still waters reflecting the Karakoram skyline.", latitude: 36.4583, longitude: 74.8667, elevation_meters: 2600 },
+  { name: "Passu Cones", region: "Hunza", description: "One of the most photographed landscapes on the Karakoram Highway — dramatic cathedral-shaped peaks rising sharply, creating an otherworldly skyline iconic to northern Pakistan.", latitude: 36.4881, longitude: 74.8917, elevation_meters: 2500 },
+  { name: "Attabad Lake", region: "Hunza", description: "A striking turquoise lake formed in 2010 by a massive landslide. Now offers thrilling boat rides and jet skiing amid submerged trees and dramatic mountain walls.", latitude: 36.3167, longitude: 74.8500, elevation_meters: 2500 },
+
+  # ── Baltistan / Skardu Region ──────────────────────────
+  { name: "Skardu", region: "Skardu", description: "Capital of Baltistan and gateway to K2, the world's second-highest peak. Surrounded by cold deserts, turquoise lakes, ancient forts, and some of the most dramatic mountain scenery on the planet.", latitude: 35.2971, longitude: 75.6333, elevation_meters: 2228 },
+  { name: "Shangrila Resort", region: "Skardu", description: "Known as 'Heaven on Earth,' Shangrila sits on the shores of Lower Kachura Lake with an iconic airplane-fuselage restaurant and gardens — one of Pakistan's most famous tourist landmarks.", latitude: 35.3333, longitude: 75.6167, elevation_meters: 2500 },
+  { name: "Upper Kachura Lake", region: "Skardu", description: "A hidden gem above Shangrila accessible only by a short hike, offering boat rides on crystal-clear turquoise waters so transparent you can see the bottom at 20 feet.", latitude: 35.3500, longitude: 75.6167, elevation_meters: 2500 },
+  { name: "Sadpara Lake", region: "Skardu", description: "A natural deep blue lake just south of Skardu town fed by the Sadpara Glacier, offering boat rides with views of the surrounding barren mountains and the Sadpara Dam.", latitude: 35.2667, longitude: 75.6167, elevation_meters: 2636 },
+  { name: "Katpana Cold Desert", region: "Skardu", description: "One of the highest cold deserts in the world, featuring vast sand dunes surrounded by snow-capped mountains — a surreal landscape where desert meets Karakoram peaks.", latitude: 35.3083, longitude: 75.5833, elevation_meters: 2226 },
+  { name: "Shigar Fort", region: "Skardu", description: "A beautifully restored 17th-century fort converted into a heritage hotel by the Aga Khan Trust. Sits at the gateway to the Baltoro Glacier and K2.", latitude: 35.4264, longitude: 75.7500, elevation_meters: 2260 },
+  { name: "Deosai National Park", region: "Skardu", description: "The second-highest plateau in the world at 4,114m. A vast treeless expanse of wildflower meadows teeming with Himalayan brown bears and Sheosar Lake at its heart.", latitude: 35.0897, longitude: 75.4033, elevation_meters: 4114 },
+
+  # ── Hidden Gems ────────────────────────────────────────
+  { name: "Astore Valley", region: "Gilgit-Baltistan", description: "A lush green valley between Gilgit and Deosai, the southern gateway to Deosai National Park. Unspoiled alpine meadows, trout-filled streams, and the dramatic Rama Lake.", latitude: 35.3667, longitude: 74.8583, elevation_meters: 2168 },
+  { name: "Phander Valley", region: "Gilgit-Baltistan", description: "A serene turquoise lake surrounded by green meadows and pine forests in Ghizer district. Some of the most peaceful and photogenic lake scenery in all of northern Pakistan.", latitude: 36.3833, longitude: 72.5833, elevation_meters: 3100 },
+  { name: "Khunjerab Pass", region: "Hunza", description: "The highest paved international border crossing in the world at 4,693m, marking the China-Pakistan frontier on the Karakoram Highway. Spot Marco Polo sheep and stand at the rooftop of the world.", latitude: 36.8500, longitude: 75.4167, elevation_meters: 4693 },
 ]
 
 place_images = {
-  "Hunza Valley" => "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=1200&q=80",
-  "Fairy Meadows" => "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=1200&q=80",
-  "Skardu" => "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=1200&q=80",
-  "Swat Valley" => "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1200&q=80",
-  "Neelum Valley" => "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1200&q=80",
-  "Attabad Lake" => "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=1200&q=80",
-  "Kumrat Valley" => "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80",
-  "Deosai National Park" => "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
-  "Khunjerab Pass" => "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80",
-  "Naltar Valley" => "https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=1200&q=80",
-  "Rakaposhi Base Camp" => "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80",
-  "Kalam" => "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80",
-  "Chitral" => "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80",
-  "Ratti Gali Lake" => "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1200&q=80",
-  "Shogran" => "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80",
-  "Shigar" => "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1200&q=80",
-  "Passu" => "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=1200&q=80",
-  "Malam Jabba" => "https://images.unsplash.com/photo-1482192505345-5655af888cc4?w=1200&q=80",
-  "Lahore Old City" => "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=1200&q=80",
-  "Naran" => "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&q=80"
+  # Galyat Region
+  "Mushkpuri Top" => "https://images.unsplash.com/photo-1679170250337-91efc63f4a38?w=1200&q=80",
+  "Miranjani Top" => "https://images.unsplash.com/photo-1652260035169-19a650312241?w=1200&q=80",
+  # Kaghan Valley
+  "Naran" => "https://images.unsplash.com/photo-1572707582365-0ee1c8e71173?w=1200&q=80",
+  "Kaghan" => "https://images.unsplash.com/photo-1668061867899-02b4cfa34747?w=1200&q=80",
+  "Sharan Forest" => "https://images.unsplash.com/photo-1722599556316-7873764fe301?w=1200&q=80",
+  "Shogran" => "https://images.unsplash.com/photo-1572099259127-766d3444c234?w=1200&q=80",
+  # Azad Kashmir
+  "Neelum Valley" => "https://images.unsplash.com/photo-1598291333322-1b7592118fac?w=1200&q=80",
+  "Sharda" => "https://images.unsplash.com/photo-1634276842141-78d5fc34390a?w=1200&q=80",
+  "Kel" => "https://images.unsplash.com/photo-1725916691105-5d9831efce08?w=1200&q=80",
+  "Arang Kel" => "https://images.unsplash.com/photo-1725916691105-5d9831efce08?w=1200&q=80",
+  "Taobat" => "https://images.unsplash.com/photo-1651135135875-a6d458a9462d?w=1200&q=80",
+  "Shounter Valley" => "https://images.unsplash.com/photo-1615552713642-73c367c8915c?w=1200&q=80",
+  "Leepa Valley" => "https://images.unsplash.com/photo-1723579038258-2a9c9e777509?w=1200&q=80",
+  "Ratti Gali Lake" => "https://images.unsplash.com/photo-1712127283283-420c9c80446b?w=1200&q=80",
+  # Diamer / Nanga Parbat
+  "Fairy Meadows" => "https://images.unsplash.com/photo-1664872749442-01507d1f1c6e?w=1200&q=80",
+  "Beyal Camp" => "https://images.unsplash.com/photo-1664872506479-248d07d7d785?w=1200&q=80",
+  "Nanga Parbat Base Camp" => "https://images.unsplash.com/photo-1585646688592-0d53a03e2d12?w=1200&q=80",
+  # Chitral
+  "Chitral Town" => "https://images.unsplash.com/photo-1584562995253-9de7c2a45982?w=1200&q=80",
+  "Kalash Valley" => "https://images.unsplash.com/photo-1571089347199-f0600f382311?w=1200&q=80",
+  # Swat
+  "Swat Valley" => "https://images.unsplash.com/photo-1629146732817-df2e95194367?w=1200&q=80",
+  "Kalam" => "https://images.unsplash.com/photo-1634633989623-69c2398928de?w=1200&q=80",
+  "Malam Jabba" => "https://images.unsplash.com/photo-1708519749902-75805b36d869?w=1200&q=80",
+  # Kumrat
+  "Kumrat Valley" => "https://images.unsplash.com/photo-1596464148416-e0916276a9f5?w=1200&q=80",
+  # Gilgit & Surroundings
+  "Gilgit" => "https://images.unsplash.com/photo-1654116001918-2ed4250cf9db?w=1200&q=80",
+  "Naltar Valley" => "https://images.unsplash.com/photo-1675410229007-7f3f86c1a4e6?w=1200&q=80",
+  "Rakaposhi Base Camp" => "https://images.unsplash.com/photo-1654598768024-3ab6b9a9dff6?w=1200&q=80",
+  "Nagar Valley" => "https://images.unsplash.com/photo-1654116001918-2ed4250cf9db?w=1200&q=80",
+  # Hunza
+  "Hunza Valley" => "https://images.unsplash.com/photo-1514558427911-8e293bebf18c?w=1200&q=80",
+  "Hussaini Suspension Bridge" => "https://images.unsplash.com/photo-1774286673653-9185dbdedbe6?w=1200&q=80",
+  "Borith Lake" => "https://images.unsplash.com/photo-1640881193563-b5f0bf20019a?w=1200&q=80",
+  "Passu Cones" => "https://images.unsplash.com/photo-1638295381225-c6cd6a467935?w=1200&q=80",
+  "Attabad Lake" => "https://images.unsplash.com/photo-1612128952123-88ed13410495?w=1200&q=80",
+  # Skardu / Baltistan
+  "Skardu" => "https://images.unsplash.com/photo-1672652787237-20f1cf66624e?w=1200&q=80",
+  "Shangrila Resort" => "https://images.unsplash.com/photo-1646350375272-104eee57dc77?w=1200&q=80",
+  "Upper Kachura Lake" => "https://images.unsplash.com/photo-1678260462226-3380792d52bd?w=1200&q=80",
+  "Sadpara Lake" => "https://images.unsplash.com/photo-1627670476256-d333ee59da11?w=1200&q=80",
+  "Katpana Cold Desert" => "https://images.unsplash.com/photo-1706030380882-b36f83acf53e?w=1200&q=80",
+  "Shigar Fort" => "https://images.unsplash.com/photo-1689799700359-e26f633a4ffa?w=1200&q=80",
+  "Deosai National Park" => "https://images.unsplash.com/photo-1610064095022-db1b488c05f1?w=1200&q=80",
+  # Hidden Gems
+  "Astore Valley" => "https://images.unsplash.com/photo-1752805557869-b6f6d93a8075?w=1200&q=80",
+  "Phander Valley" => "https://images.unsplash.com/photo-1675410240817-6db8cb6efbb8?w=1200&q=80",
+  "Khunjerab Pass" => "https://images.unsplash.com/photo-1753696252581-3fec5cf1b825?w=1200&q=80",
 }
 
 places_data.each do |pd|
-  place = Place.create!(name: pd[:name], region: pd[:region], description: pd[:description], latitude: pd[:latitude], longitude: pd[:longitude])
+  place = Place.create!(
+    name: pd[:name],
+    region: pd[:region],
+    description: pd[:description],
+    latitude: pd[:latitude],
+    longitude: pd[:longitude],
+    elevation_meters: pd[:elevation_meters]
+  )
   if place_images[pd[:name]]
     attach_image(place, :cover_image, place_images[pd[:name]], "#{pd[:name].parameterize}_cover.jpg")
   end
@@ -719,12 +802,25 @@ puts "  Created #{Place.count} places with cover images"
 hunza = Place.find_by(name: "Hunza Valley")
 fairy = Place.find_by(name: "Fairy Meadows")
 skardu = Place.find_by(name: "Skardu")
+neelum = Place.find_by(name: "Neelum Valley")
+deosai = Place.find_by(name: "Deosai National Park")
+passu = Place.find_by(name: "Passu Cones")
+naran = Place.find_by(name: "Naran")
+kalash = Place.find_by(name: "Kalash Valley")
+ratti = Place.find_by(name: "Ratti Gali Lake")
 
 PlaceReview.create!(place: hunza, user: traveler, rating: 5, text: "The most beautiful place I've ever visited. Rakaposhi views from Eagle's Nest are breathtaking!")
 PlaceReview.create!(place: hunza, user: traveler2, rating: 5, text: "Incredible hospitality. The apricot season in summer is heavenly. Must visit!")
 PlaceReview.create!(place: fairy, user: traveler, rating: 4, text: "The trek up is challenging but so worth it. Camping with Nanga Parbat in view is magical.")
 PlaceReview.create!(place: fairy, user: traveler3, rating: 5, text: "Best camping experience of my life. No phone signal — just you and the mountain.")
 PlaceReview.create!(place: skardu, user: traveler, rating: 5, text: "Skardu is another world. Upper Kachura Lake is the most peaceful place on earth.")
+PlaceReview.create!(place: skardu, user: traveler2, rating: 4, text: "Stunning landscapes everywhere you look. Shangrila is as magical as the name suggests.")
+PlaceReview.create!(place: neelum, user: traveler3, rating: 5, text: "Neelum Valley feels like a hidden world. The drive along the river is unforgettable.")
+PlaceReview.create!(place: deosai, user: traveler, rating: 5, text: "Deosai is otherworldly. We saw 3 brown bears! Sheosar Lake at dawn is something I'll never forget.")
+PlaceReview.create!(place: passu, user: traveler2, rating: 5, text: "Passu Cones at sunset is the most dramatic scenery I've ever witnessed. Worth every hour of the KKH drive.")
+PlaceReview.create!(place: naran, user: traveler3, rating: 4, text: "Lake Saif-ul-Malook lives up to the legends. The jeep ride up is an adventure in itself!")
+PlaceReview.create!(place: kalash, user: traveler, rating: 5, text: "The Kalash people are incredibly welcoming. Their culture and festivals are unlike anything in the world.")
+PlaceReview.create!(place: ratti, user: traveler2, rating: 5, text: "The trek to Ratti Gali is exhausting but the turquoise lake surrounded by peaks makes it all worth it. Absolutely magical!")
 puts "  Created #{PlaceReview.count} place reviews"
 
 # ═══════════════════════════════════════════════════════════
