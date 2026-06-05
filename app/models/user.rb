@@ -94,7 +94,7 @@ class User < ApplicationRecord
 
   def profile_completed?
     if planner?
-      agency_name.present? && phone.present? && agency_tagline.present? && avatar.attached?
+      agency_name.present? && phone.present? && agency_tagline.present?
     else
       phone.present?
     end
