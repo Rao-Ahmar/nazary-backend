@@ -14,6 +14,12 @@ module Api
         trips = trips.by_host(params[:host_id]) if params[:host_id].present?
         trips = trips.by_trip_type(params[:trip_type]) if params[:trip_type].present?
 
+        if params[:min_rating].present?
+          trips = trips.left_joins(:reviews)
+                       .group("trips.id")
+                       .having("COALESCE(AVG(reviews.rating), 0) >= ?", params[:min_rating].to_f)
+        end
+
         trips = if params[:q].present? && params[:sort].blank?
                   trips  # pg_search orders by relevance rank
                 else

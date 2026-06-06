@@ -9,6 +9,13 @@ module Api
           q = "%#{params[:q]}%"
           agencies = agencies.where("agency_name ILIKE :q OR name ILIKE :q OR city ILIKE :q", q: q)
         end
+
+        if params[:min_rating].present?
+          agencies = agencies.left_joins(:planner_reviews_received)
+                             .group("users.id")
+                             .having("COALESCE(AVG(planner_reviews.rating), 0) >= ?", params[:min_rating].to_f)
+        end
+
         result = paginate(agencies)
         render json: result[:data], each_serializer: AgencySerializer, meta: result[:meta]
       end
