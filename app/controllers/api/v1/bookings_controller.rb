@@ -7,6 +7,9 @@ module Api
         trip = Trip.find(params[:trip_id])
         seats = (params[:seats] || 1).to_i
         advance_fee = (trip.price * seats * 0.01).ceil
+
+        current_user.update(phone: params[:phone]) if params[:phone].present?
+
         booking = current_user.bookings.new(trip: trip, amount: advance_fee, seats: seats)
 
         if booking.save
