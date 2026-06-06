@@ -15,9 +15,11 @@ module Api
         trips = trips.by_trip_type(params[:trip_type]) if params[:trip_type].present?
 
         if params[:min_rating].present?
-          trips = trips.left_joins(:reviews)
-                       .group("trips.id")
-                       .having("COALESCE(AVG(reviews.rating), 0) >= ?", params[:min_rating].to_f)
+          rated_ids = Trip.left_joins(:reviews)
+                         .group(:id)
+                         .having("COALESCE(AVG(reviews.rating), 0) >= ?", params[:min_rating].to_f)
+                         .pluck(:id)
+          trips = trips.where(id: rated_ids)
         end
 
         trips = if params[:q].present? && params[:sort].blank?

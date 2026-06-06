@@ -11,9 +11,11 @@ module Api
         end
 
         if params[:min_rating].present?
-          agencies = agencies.left_joins(:planner_reviews_received)
-                             .group("users.id")
-                             .having("COALESCE(AVG(planner_reviews.rating), 0) >= ?", params[:min_rating].to_f)
+          rated_ids = User.left_joins(:planner_reviews_received)
+                         .group(:id)
+                         .having("COALESCE(AVG(planner_reviews.rating), 0) >= ?", params[:min_rating].to_f)
+                         .pluck(:id)
+          agencies = agencies.where(id: rated_ids)
         end
 
         result = paginate(agencies)
