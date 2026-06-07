@@ -38,11 +38,13 @@ module Api
                 end
 
         result = paginate(trips)
+        expires_in 2.minutes, public: true
         render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]
       end
 
       def featured
         trips = Trip.featured.includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob })
+        expires_in 5.minutes, public: true
         render json: trips, each_serializer: TripListSerializer
       end
 
@@ -50,6 +52,7 @@ module Api
         trip = Trip.includes(:host, :reviews, :bookings, :itinerary_days,
                              hero_image_attachment: :blob, gallery_attachments: :blob)
                    .find(params[:id])
+        expires_in 1.minute, public: true
         render json: trip, serializer: TripDetailSerializer
       end
     end

@@ -20,11 +20,13 @@ module Api
         end
 
         result = paginate(agencies)
+        expires_in 5.minutes, public: true
         render json: result[:data], each_serializer: AgencySerializer, meta: result[:meta]
       end
 
       def show
         agency = User.where(role: :planner).find(params[:id])
+        expires_in 2.minutes, public: true
         render json: agency, serializer: AgencySerializer
       end
 
@@ -50,6 +52,7 @@ module Api
                           .includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob })
                           .order(start_date: :asc)
         result = paginate(trips)
+        expires_in 2.minutes, public: true
         render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]
       end
 
@@ -59,12 +62,14 @@ module Api
           return render json: { error: "Name parameter is required" }, status: :bad_request
         end
         taken = User.where(agency_name_normalized: name).exists?
+        expires_in 30.seconds, public: true
         render json: { available: !taken }
       end
 
       def explore
         agency = User.where(role: :planner, slug: params[:slug]).first
         if agency
+          expires_in 2.minutes, public: true
           render json: agency, serializer: AgencySerializer
         else
           render json: { error: "Agency not found" }, status: :not_found
