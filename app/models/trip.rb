@@ -1,5 +1,5 @@
 class Trip < ApplicationRecord
-  belongs_to :host, class_name: "User", foreign_key: :user_id
+  belongs_to :host, class_name: "User", foreign_key: :user_id, counter_cache: :trips_count
   belongs_to :source_trip, class_name: "Trip", optional: true
   has_many :recurring_instances, class_name: "Trip", foreign_key: :source_trip_id, dependent: :nullify
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_07_123157) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_07_123354) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -377,6 +377,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_07_123157) do
     t.boolean "recurring_enabled", default: false, null: false
     t.jsonb "recurring_rule"
     t.integer "seats_sold", default: 0, null: false
+    t.integer "reviews_count", default: 0, null: false
+    t.decimal "cached_average_rating", precision: 3, scale: 1, default: "0.0", null: false
     t.index ["location"], name: "index_trips_on_location_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
     t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"
@@ -438,6 +440,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_07_123157) do
     t.bigint "free_trip_pair_user_id"
     t.integer "corporate_trips_count", default: 0, null: false
     t.string "corporate_level", default: "none"
+    t.integer "trips_count", default: 0, null: false
+    t.decimal "cached_host_rating", precision: 3, scale: 1, default: "0.0", null: false
     t.index ["agency_name_normalized"], name: "index_users_on_agency_name_normalized", unique: true, where: "(agency_name_normalized IS NOT NULL)"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true, where: "(google_uid IS NOT NULL)"
