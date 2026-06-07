@@ -3,14 +3,17 @@ module Api
     module Admin
       class StatsController < BaseController
         def index
+          counts_by_status = Booking.group(:status).count
+          total = counts_by_status.values.sum
+
           render json: {
-            total_bookings: Booking.count,
-            pending_count: Booking.pending.count,
-            approved_count: Booking.approved.count,
-            payment_submitted_count: Booking.payment_submitted.count,
-            confirmed_count: Booking.confirmed.count,
-            cancelled_count: Booking.cancelled.count,
-            rejected_count: Booking.rejected.count,
+            total_bookings: total,
+            pending_count: counts_by_status["pending"] || 0,
+            approved_count: counts_by_status["approved"] || 0,
+            payment_submitted_count: counts_by_status["payment_submitted"] || 0,
+            confirmed_count: counts_by_status["confirmed"] || 0,
+            cancelled_count: counts_by_status["cancelled"] || 0,
+            rejected_count: counts_by_status["rejected"] || 0,
             total_revenue: Booking.confirmed.sum(:amount),
             recent_bookings: recent_bookings_json
           }
