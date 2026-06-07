@@ -8,6 +8,9 @@ module Api
 
         trips = trips.search_by_text(params[:q]) if params[:q].present?
         trips = trips.by_category(params[:tag]) if params[:tag].present?
+        if params[:agency].present?
+          trips = trips.joins(:host).where("users.agency_name ILIKE ?", "%#{params[:agency]}%")
+        end
         trips = trips.where("price >= ?", params[:min_price]) if params[:min_price].present?
         trips = trips.where("price <= ?", params[:max_price]) if params[:max_price].present?
         trips = trips.by_date_range(params[:start_date_from], params[:start_date_to])
