@@ -27,11 +27,11 @@ class TripListSerializer < ActiveModel::Serializer
   end
 
   def rating
-    object.average_rating
+    object.cached_average_rating
   end
 
   def review_count
-    object.reviews.count
+    object.reviews_count
   end
 
   def content_updated_at

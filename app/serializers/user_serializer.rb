@@ -52,22 +52,22 @@ class UserSerializer < ActiveModel::Serializer
 
   def rating
     return nil unless object.planner?
-    object.trips.joins(:reviews).average("reviews.rating")&.round(1) || 0.0
+    object.cached_host_rating
   end
 
   def planner_rating
     return nil unless object.planner?
-    object.average_planner_rating
+    object.cached_host_rating
   end
 
   def trips_hosted
     return nil unless object.planner?
-    object.trips.count
+    object.trips_count
   end
 
   def total_reviews
     return nil unless object.planner?
-    Review.where(trip: object.trips).count
+    Trip.where(user_id: object.id).sum(:reviews_count)
   end
 
   def nazary_url

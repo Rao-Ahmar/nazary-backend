@@ -6,7 +6,7 @@ module Api
         before_action :require_avatar, only: [ :create ]
 
         def index
-          trips = current_user.trips.includes(:reviews, :bookings, hero_image_attachment: :blob)
+          trips = current_user.trips.includes(:bookings, hero_image_attachment: :blob)
 
           # Search
           trips = trips.search_by_text(params[:q]) if params[:q].present?

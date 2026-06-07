@@ -3,7 +3,7 @@ module Api
     module Admin
       class TripsController < BaseController
         def index
-          trips = Trip.includes(:host).order(created_at: :desc)
+          trips = Trip.includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob }).order(created_at: :desc)
           trips = trips.where(status: params[:status]) if params[:status].present?
           result = paginate(trips)
           render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]

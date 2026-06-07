@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate!
 
       def index
-        places = Place.all.order(created_at: :desc)
+        places = Place.includes(cover_image_attachment: :blob).order(created_at: :desc)
         places = places.where(region: params[:region]) if params[:region].present?
         result = paginate(places)
         render json: result[:data], each_serializer: PlaceSerializer, meta: result[:meta]

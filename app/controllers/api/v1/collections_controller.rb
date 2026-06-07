@@ -16,7 +16,7 @@ module Api
       end
 
       def show
-        collection = Collection.includes(trips: [ :host, :reviews, :bookings, { hero_image_attachment: :blob } ])
+        collection = Collection.includes(trips: [ :bookings, { hero_image_attachment: :blob, host: { avatar_attachment: :blob } } ])
                                .find(params[:id])
         render json: {
           id: collection.id.to_s,

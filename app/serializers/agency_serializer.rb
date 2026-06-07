@@ -11,11 +11,11 @@ class AgencySerializer < ActiveModel::Serializer
   end
 
   def average_rating
-    object.average_planner_rating
+    object.cached_host_rating
   end
 
   def total_trips
-    object.trips.count
+    object.trips_count
   end
 
   def avatar

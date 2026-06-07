@@ -5,6 +5,7 @@ module Api
 
       def index
         agencies = User.where(role: :planner, deactivated: false)
+                       .includes(avatar_attachment: :blob, agency_logo_attachment: :blob, cover_photo_attachment: :blob)
         if params[:q].present?
           q = "%#{params[:q]}%"
           agencies = agencies.where("agency_name ILIKE :q OR name ILIKE :q OR city ILIKE :q", q: q)
@@ -45,7 +46,9 @@ module Api
 
       def trips
         agency = User.where(role: :planner).find(params[:id])
-        trips = agency.trips.where(status: :active).order(start_date: :asc)
+        trips = agency.trips.where(status: :active)
+                          .includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob })
+                          .order(start_date: :asc)
         result = paginate(trips)
         render json: result[:data], each_serializer: TripListSerializer, meta: result[:meta]
       end

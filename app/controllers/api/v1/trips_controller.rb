@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate!, only: [:index, :show, :featured]
 
       def index
-        trips = Trip.active.upcoming.includes(:host, :reviews, :bookings, hero_image_attachment: :blob)
+        trips = Trip.active.upcoming.includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob })
 
         trips = trips.search_by_text(params[:q]) if params[:q].present?
         trips = trips.by_category(params[:tag]) if params[:tag].present?
@@ -42,7 +42,7 @@ module Api
       end
 
       def featured
-        trips = Trip.featured.includes(:host, :reviews, :bookings, hero_image_attachment: :blob)
+        trips = Trip.featured.includes(:bookings, hero_image_attachment: :blob, host: { avatar_attachment: :blob })
         render json: trips, each_serializer: TripListSerializer
       end
 

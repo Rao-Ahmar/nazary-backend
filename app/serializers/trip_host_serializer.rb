@@ -13,11 +13,11 @@ class TripHostSerializer < ActiveModel::Serializer
   end
 
   def rating
-    object.trips.joins(:reviews).average("reviews.rating")&.round(1) || 0.0
+    object.cached_host_rating
   end
 
   def trips_hosted
-    object.trips.count
+    object.trips_count
   end
 
   def nazary_url
