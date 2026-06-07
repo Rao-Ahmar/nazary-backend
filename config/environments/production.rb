@@ -56,10 +56,10 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "16.170.146.169" }
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "api.nazary.pk"), protocol: "https" }
 
   # Set default URL options for Active Storage and other URL helpers
-  Rails.application.routes.default_url_options = { host: "16.170.146.169", protocol: "http" }
+  Rails.application.routes.default_url_options = { host: ENV.fetch("APP_HOST", "api.nazary.pk"), protocol: "https" }
 
   # Gmail SMTP
   config.action_mailer.smtp_settings = {
