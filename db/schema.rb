@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_07_123354) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_07_182253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -338,6 +338,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_07_123354) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin_approved", default: false, null: false
     t.index ["planner_id"], name: "index_trip_requests_on_planner_id"
     t.index ["status"], name: "index_trip_requests_on_status"
     t.index ["user_id"], name: "index_trip_requests_on_user_id"

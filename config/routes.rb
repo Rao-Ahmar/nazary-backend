@@ -133,6 +133,10 @@ Rails.application.routes.draw do
         resources :arrangement_requests, only: [ :index, :update ]
         resources :couple_requests, only: [ :index, :update ]
         resources :corporate_trip_requests, only: [ :index, :update ]
+        resources :trip_requests, only: [ :index ] do
+          patch :approve, on: :member
+          patch :reject, on: :member
+        end
         resources :users, only: [ :index ] do
           patch :deactivate, on: :member
         end

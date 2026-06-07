@@ -2,9 +2,8 @@ class TripRequestSerializer < ActiveModel::Serializer
   attributes :id, :traveler_id, :traveler_name, :traveler_avatar,
              :planner_id, :planner_name, :planner_avatar,
              :destination, :start_date, :end_date, :seats,
-             :category, :budget, :note, :status, :created_at
-
-  # Phones hidden — admin is the middleman
+             :category, :budget, :note, :status, :traveler_phone,
+             :admin_approved, :advance_amount, :created_at
 
   def id
     object.id.to_s
@@ -22,6 +21,14 @@ class TripRequestSerializer < ActiveModel::Serializer
     object.user.avatar.attached? ? Rails.application.routes.url_helpers.url_for(object.user.avatar) : nil
   rescue StandardError
     nil
+  end
+
+  def traveler_phone
+    object.admin_approved? ? object.user.phone : nil
+  end
+
+  def advance_amount
+    object.budget ? (object.budget * 0.01).round(2) : nil
   end
 
   def planner_id

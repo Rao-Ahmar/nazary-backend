@@ -21,6 +21,17 @@ module Api
             notification_type: :request_update,
             data: { trip_request_id: trip_request.id.to_s }
           )
+
+          User.where(admin: true).find_each do |admin_user|
+            NotificationService.create(
+              user: admin_user,
+              title: "New Trip Request",
+              body: "New trip request from #{current_user.name} — advance payment pending",
+              notification_type: :request_update,
+              data: { trip_request_id: trip_request.id.to_s }
+            )
+          end
+
           render json: trip_request, serializer: TripRequestSerializer, status: :created
         else
           render json: { error: trip_request.errors.full_messages.join(", ") }, status: :unprocessable_entity

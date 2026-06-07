@@ -12,7 +12,7 @@ module Api
         def accept
           trip_request = current_user.received_trip_requests.find(params[:id])
 
-          if trip_request.pending?
+          if trip_request.pending? && trip_request.admin_approved?
             trip_request.accepted!
             NotificationService.create(
               user: trip_request.user,
@@ -23,14 +23,14 @@ module Api
             )
             render json: trip_request, serializer: TripRequestSerializer
           else
-            render json: { error: "Only pending requests can be accepted" }, status: :unprocessable_entity
+            render json: { error: "Only pending and admin-approved requests can be accepted" }, status: :unprocessable_entity
           end
         end
 
         def reject
           trip_request = current_user.received_trip_requests.find(params[:id])
 
-          if trip_request.pending?
+          if trip_request.pending? && trip_request.admin_approved?
             trip_request.rejected!
             NotificationService.create(
               user: trip_request.user,
@@ -41,7 +41,7 @@ module Api
             )
             render json: trip_request, serializer: TripRequestSerializer
           else
-            render json: { error: "Only pending requests can be rejected" }, status: :unprocessable_entity
+            render json: { error: "Only pending and admin-approved requests can be rejected" }, status: :unprocessable_entity
           end
         end
       end
