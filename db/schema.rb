@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_05_172100) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_07_123157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -82,6 +82,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_05_172100) do
     t.datetime "updated_at", null: false
     t.text "admin_note"
     t.integer "seats", default: 1, null: false
+    t.index ["status"], name: "index_bookings_on_status"
     t.index ["trip_id", "user_id"], name: "index_bookings_on_trip_id_and_user_id", unique: true
     t.index ["trip_id"], name: "index_bookings_on_trip_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
@@ -379,6 +380,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_05_172100) do
     t.index ["location"], name: "index_trips_on_location_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
     t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"
+    t.index ["start_date"], name: "index_trips_on_start_date"
+    t.index ["status", "start_date"], name: "index_trips_on_status_and_start_date"
+    t.index ["status"], name: "index_trips_on_status"
     t.index ["tags"], name: "index_trips_on_tags", using: :gin
     t.index ["title"], name: "index_trips_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["trip_type"], name: "index_trips_on_trip_type"
