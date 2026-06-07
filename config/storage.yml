@@ -12,9 +12,6 @@ amazon:
   secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
   region: <%= ENV.fetch("AWS_REGION", "eu-north-1") %>
   bucket: <%= ENV.fetch("AWS_BUCKET", "nazary-uploads") %>
-  public: true
-  upload:
-    acl: nil
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
