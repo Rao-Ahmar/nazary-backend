@@ -165,6 +165,7 @@ module Api
             start_date: new_start,
             end_date: new_end,
             total_seats: new_seats.present? ? new_seats.to_i : @trip.total_seats,
+            status: :active,
             trip_type: @trip.trip_type,
             tags: @trip.tags,
             highlights: @trip.highlights,
