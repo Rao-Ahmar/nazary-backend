@@ -43,15 +43,16 @@ class Trip < ApplicationRecord
     scope = scope.where("price <= ?", max) if max.present?
     scope
   }
+  scope :by_departure, ->(departure) { where("departure ILIKE ?", "%#{departure}%") }
 
   before_save :set_premium_flag
 
   include PgSearch::Model
   pg_search_scope :search_by_text,
-    against: [ :title, :location, :description ],
+    against: [ :title, :location, :description, :departure ],
     using: {
       tsearch: { prefix: true, dictionary: "simple" },
-      trigram: { only: [ :title, :location ], threshold: 0.1 }
+      trigram: { only: [ :title, :location, :departure ], threshold: 0.1 }
     }
 
   def seats_left
@@ -83,7 +84,7 @@ class Trip < ApplicationRecord
     return unless start_date_was.present?
     return unless start_date_was < Date.current
 
-    content_fields = %w[title description location price duration start_date end_date total_seats
+    content_fields = %w[title description location departure price duration start_date end_date total_seats
                         subtitle currency trip_type tags highlights recurring_enabled recurring_rule]
     return unless (changed & content_fields).any?
 

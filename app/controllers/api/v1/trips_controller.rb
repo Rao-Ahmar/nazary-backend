@@ -16,6 +16,8 @@ module Api
         trips = trips.by_date_range(params[:start_date_from], params[:start_date_to])
         trips = trips.by_host(params[:host_id]) if params[:host_id].present?
         trips = trips.by_trip_type(params[:trip_type]) if params[:trip_type].present?
+        trips = trips.where("location ILIKE ?", "%#{params[:location]}%") if params[:location].present?
+        trips = trips.by_departure(params[:departure]) if params[:departure].present?
 
         if params[:min_rating].present?
           rated_ids = Trip.left_joins(:reviews)

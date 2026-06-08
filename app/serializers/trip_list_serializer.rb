@@ -1,5 +1,5 @@
 class TripListSerializer < ActiveModel::Serializer
-  attributes :id, :title, :location, :hero_image, :price, :currency,
+  attributes :id, :title, :location, :departure, :hero_image, :price, :currency,
              :duration, :dates, :start_date, :seats_left, :total_seats, :status, :tags, :rating, :review_count,
              :trip_type, :is_premium, :content_updated_at, :is_updated,
              :source_trip_id, :recurring_enabled

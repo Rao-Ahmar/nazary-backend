@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_08_074720) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_08_123802) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -381,6 +381,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_074720) do
     t.integer "seats_sold", default: 0, null: false
     t.integer "reviews_count", default: 0, null: false
     t.decimal "cached_average_rating", precision: 3, scale: 1, default: "0.0", null: false
+    t.string "departure"
+    t.index ["departure"], name: "index_trips_on_departure_trigram", opclass: :gin_trgm_ops, using: :gin
     t.index ["location"], name: "index_trips_on_location_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["recurring_enabled"], name: "index_trips_on_recurring_enabled"
     t.index ["source_trip_id"], name: "index_trips_on_source_trip_id"

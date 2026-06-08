@@ -33,13 +33,13 @@ module Api
         end
 
         def update
-          old_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date")
+          old_attributes = @trip.attributes.slice("title", "description", "location", "departure", "price", "duration", "start_date", "end_date")
 
           if @trip.update(trip_params)
             update_itinerary_days(@trip) if params[:itinerary_days].present?
 
             # Track changes (total_seats excluded — seat changes don't notify travelers)
-            new_attributes = @trip.attributes.slice("title", "description", "location", "price", "duration", "start_date", "end_date")
+            new_attributes = @trip.attributes.slice("title", "description", "location", "departure", "price", "duration", "start_date", "end_date")
             changed_fields = {}
             old_attributes.each do |key, old_val|
               new_val = new_attributes[key]
@@ -159,6 +159,7 @@ module Api
             subtitle: @trip.subtitle,
             description: @trip.description,
             location: @trip.location,
+            departure: @trip.departure,
             price: @trip.price,
             currency: @trip.currency,
             duration: @trip.duration,
@@ -223,7 +224,7 @@ module Api
         end
 
         def trip_params
-          params.permit(:title, :subtitle, :description, :location, :price,
+          params.permit(:title, :subtitle, :description, :location, :departure, :price,
                         :currency, :duration, :start_date, :end_date, :total_seats, :trip_type,
                         :recurring_enabled,
                         tags: [], highlights: [],
