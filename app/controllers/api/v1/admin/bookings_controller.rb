@@ -34,12 +34,22 @@ module Api
             return
           end
 
-          booking.approved!
+          booking.update!(admin_approved: true)
 
+          # Notify traveler
           NotificationService.create(
             user: booking.user,
             title: "Booking Approved!",
-            body: "Your booking for #{booking.trip.title} is approved. Please submit payment to confirm your seat.",
+            body: "Your booking for #{booking.trip.title} has been approved by Nazary.",
+            notification_type: :booking_update,
+            data: { trip_id: booking.trip_id.to_s, booking_id: booking.id.to_s }
+          )
+
+          # Notify planner that booking is now unlocked for their action
+          NotificationService.create(
+            user: booking.trip.host,
+            title: "Booking Ready for Review",
+            body: "#{booking.user.name}'s booking for #{booking.trip.title} has been verified. You can now accept or reject.",
             notification_type: :booking_update,
             data: { trip_id: booking.trip_id.to_s, booking_id: booking.id.to_s }
           )

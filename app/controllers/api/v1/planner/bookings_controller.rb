@@ -16,6 +16,10 @@ module Api
 
         def confirm
           booking = find_booking
+          unless booking.admin_approved?
+            render json: { error: "This booking is pending admin approval. You can accept once Nazary verifies the payment." }, status: :unprocessable_entity
+            return
+          end
           if booking.trip.seats_left <= 0
             render json: { error: "No seats available. Update total seats or cancel other bookings first." }, status: :unprocessable_entity
             return
@@ -33,6 +37,10 @@ module Api
 
         def cancel
           booking = find_booking
+          unless booking.admin_approved?
+            render json: { error: "This booking is pending admin approval. You can reject once Nazary verifies the payment." }, status: :unprocessable_entity
+            return
+          end
           booking.cancelled!
           NotificationService.create(
             user: booking.user,

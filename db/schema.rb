@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_07_182253) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_08_074720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -82,6 +82,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_07_182253) do
     t.datetime "updated_at", null: false
     t.text "admin_note"
     t.integer "seats", default: 1, null: false
+    t.boolean "admin_approved", default: false, null: false
     t.index ["status"], name: "index_bookings_on_status"
     t.index ["trip_id", "user_id"], name: "index_bookings_on_trip_id_and_user_id", unique: true
     t.index ["trip_id"], name: "index_bookings_on_trip_id"

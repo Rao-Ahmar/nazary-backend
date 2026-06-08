@@ -2,7 +2,8 @@ class AdminBookingSerializer < ActiveModel::Serializer
   attributes :id, :trip_id, :traveler_id, :traveler_name, :traveler_email, :traveler_phone, :traveler_avatar,
              :trip_title, :trip_location, :trip_hero_image, :trip_start_date, :trip_price,
              :planner_id, :planner_name, :agency_name, :planner_phone,
-             :status, :amount, :admin_note, :payment_proofs, :created_at
+             :status, :amount, :seats, :admin_approved, :total_trip_cost, :admin_commission,
+             :admin_note, :payment_proofs, :created_at
 
   def id
     object.id.to_s
@@ -76,6 +77,22 @@ class AdminBookingSerializer < ActiveModel::Serializer
     object.payment_proofs.order(created_at: :desc).map do |proof|
       PaymentProofSerializer.new(proof).as_json
     end
+  end
+
+  def seats
+    object.seats
+  end
+
+  def admin_approved
+    object.admin_approved
+  end
+
+  def total_trip_cost
+    object.trip.price * (object.seats || 1)
+  end
+
+  def admin_commission
+    object.amount
   end
 
   def created_at
