@@ -52,7 +52,12 @@ module Api
         trip = Trip.includes(:host, :reviews, :bookings, :itinerary_days,
                              hero_image_attachment: :blob, gallery_attachments: :blob)
                    .find(params[:id])
-        expires_in 1.minute, public: true
+        if current_user
+          # Authenticated requests include user-specific data (my_booking_status) — don't cache publicly
+          expires_in 0, public: false
+        else
+          expires_in 1.minute, public: true
+        end
         render json: trip, serializer: TripDetailSerializer
       end
     end
