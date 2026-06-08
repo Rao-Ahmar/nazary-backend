@@ -2,8 +2,8 @@ class BookingSerializer < ActiveModel::Serializer
   attributes :id, :trip_id, :traveler_id, :traveler_name, :traveler_avatar,
              :status, :amount, :seats, :admin_note, :admin_approved,
              :total_trip_cost, :admin_commission, :created_at,
-             :trip_title, :trip_hero_image, :trip_location, :trip_price
-  # Phone hidden — admin is the middleman
+             :trip_title, :trip_hero_image, :trip_location, :trip_price,
+             :traveler_phone, :traveler_email
 
   def id
     object.id.to_s
@@ -47,6 +47,15 @@ class BookingSerializer < ActiveModel::Serializer
 
   def trip_price
     object.trip.price
+  end
+
+  # Only reveal traveler contact info to planner after admin approves
+  def traveler_phone
+    object.admin_approved? ? object.user.phone : nil
+  end
+
+  def traveler_email
+    object.admin_approved? ? object.user.email : nil
   end
 
   def admin_approved
