@@ -49,13 +49,13 @@ class BookingSerializer < ActiveModel::Serializer
     object.trip.price
   end
 
-  # Only reveal traveler contact info to planner after admin approves
+  # Reveal traveler contact info once admin has approved (persists across all statuses)
   def traveler_phone
-    object.admin_approved? ? object.user.phone : nil
+    (object.admin_approved? || object.confirmed?) ? object.user.phone : nil
   end
 
   def traveler_email
-    object.admin_approved? ? object.user.email : nil
+    (object.admin_approved? || object.confirmed?) ? object.user.email : nil
   end
 
   def admin_approved
