@@ -3,6 +3,7 @@ module Api
     module Planner
       class TripsController < Planner::BaseController
         before_action :set_trip, only: [ :update, :destroy, :publish, :complete, :hero_image, :gallery, :update_seats, :reschedule, :stop_recurring ]
+        before_action :check_advance_lock, only: [ :update, :destroy ]
         before_action :require_avatar, only: [ :create ]
 
         def index
@@ -208,6 +209,12 @@ module Api
 
         def set_trip
           @trip = current_user.trips.find(params[:id])
+        end
+
+        def check_advance_lock
+          if @trip.advance_locked?
+            render json: { error: "This trip has approved advance payments. Please contact admin to make changes." }, status: :forbidden
+          end
         end
 
         def award_points_for_completed_trip

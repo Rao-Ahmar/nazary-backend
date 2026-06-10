@@ -68,6 +68,10 @@ class Trip < ApplicationRecord
     (end_date - start_date).to_i
   end
 
+  def advance_locked?
+    bookings.where(admin_approved: true).exists?
+  end
+
   private
 
   def end_date_after_start_date

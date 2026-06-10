@@ -2,7 +2,7 @@ class TripListSerializer < ActiveModel::Serializer
   attributes :id, :title, :location, :departure, :hero_image, :price, :currency,
              :duration, :dates, :start_date, :seats_left, :total_seats, :status, :tags, :rating, :review_count,
              :trip_type, :is_premium, :content_updated_at, :is_updated,
-             :source_trip_id, :recurring_enabled
+             :source_trip_id, :recurring_enabled, :advance_locked
 
   has_one :host, serializer: TripHostSerializer
 
@@ -44,5 +44,9 @@ class TripListSerializer < ActiveModel::Serializer
 
   def source_trip_id
     object.source_trip_id&.to_s
+  end
+
+  def advance_locked
+    object.bookings.loaded? ? object.bookings.any?(&:admin_approved?) : object.advance_locked?
   end
 end

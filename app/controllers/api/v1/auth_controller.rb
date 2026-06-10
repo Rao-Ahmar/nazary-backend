@@ -53,13 +53,10 @@ module Api
         user = User.find_by(email: params[:email]&.downcase)
         if user
           token = user.generate_password_reset_token!
-          # In production, send email with token. For now, return token in response.
-          # In production, email the token. Never expose it in the API response.
-          render json: { message: "Password reset instructions sent" }
-        else
-          # Don't reveal whether the email exists
-          render json: { message: "Password reset instructions sent" }
+          PasswordResetMailer.reset_link(user: user, token: token).deliver_later
         end
+        # Don't reveal whether the email exists
+        render json: { message: "Password reset instructions sent" }
       end
 
       def reset_password
