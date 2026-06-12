@@ -157,6 +157,9 @@ Rails.application.routes.draw do
           patch :mark_free_trip_arranged, on: :member
         end
 
+        # Lucky draw
+        get :lucky_draw_eligible, to: "lucky_draw#eligible"
+
         # Payment account settings
         resources :payment_accounts, only: [ :index, :create, :update, :destroy ]
 
