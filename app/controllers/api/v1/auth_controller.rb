@@ -60,8 +60,8 @@ module Api
       end
 
       def reset_password
-        user = User.find_by(password_reset_token: params[:token])
-        if user.nil? || !user.password_reset_valid?
+        user = User.find_by_token_for(:password_reset, params[:token])
+        if user.nil?
           return render json: { error: "Invalid or expired reset token" }, status: :unprocessable_entity
         end
 
@@ -71,7 +71,6 @@ module Api
 
         user.password = params[:password]
         user.save!
-        user.clear_password_reset!
         render json: { message: "Password has been reset successfully" }
       end
 

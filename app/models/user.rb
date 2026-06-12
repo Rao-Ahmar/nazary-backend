@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   has_secure_password validations: false
+  generates_token_for :password_reset, expires_in: 2.hours do
+    password_salt&.last(10)
+  end
   validates :password, presence: true, on: :create, unless: :google_uid?
 
   enum :role, { traveler: 0, planner: 1 }
@@ -113,18 +116,7 @@ class User < ApplicationRecord
   end
 
   def generate_password_reset_token!
-    self.password_reset_token = SecureRandom.urlsafe_base64(32)
-    self.password_reset_sent_at = Time.current
-    save!
-    password_reset_token
-  end
-
-  def password_reset_valid?
-    password_reset_sent_at.present? && password_reset_sent_at > 2.hours.ago
-  end
-
-  def clear_password_reset!
-    update!(password_reset_token: nil, password_reset_sent_at: nil)
+    generate_token_for(:password_reset)
   end
 
   def generate_refresh_token!
