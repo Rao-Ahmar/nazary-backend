@@ -10,6 +10,7 @@ module Api
           user.referred_by = referrer if referrer
         end
         if user.save
+          AdminMailer.new_user_notification(user: user).deliver_later
           token = JwtService.encode(user.id)
           refresh_token = user.generate_refresh_token!
           render json: {
@@ -114,6 +115,7 @@ module Api
           unless user.save
             return render json: { error: user.errors.full_messages.join(", ") }, status: :unprocessable_entity
           end
+          AdminMailer.new_user_notification(user: user).deliver_later
         elsif user.google_uid.blank?
           user.update!(google_uid: google_uid)
         end
